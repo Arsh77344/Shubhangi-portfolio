@@ -766,64 +766,72 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
   else if(wide.addListener)wide.addListener(mode);
 })();
 
-/* ---- the fold: one square of paper becomes a paper crane as you scroll past ----
-   Seven paper facets over eleven SHARED vertices. Flat, they tile the square
-   exactly; folded, they are the crane. Because the facets index into one vertex
-   list, every shared edge stays shared at every step -- the sheet bends, and it
-   can never come apart. A gathered middle and a slight turn carry it across. ---- */
+/* ---- the fold: a square of paper becomes a swan, then hands the page over ----
+   Ten facets over sixteen SHARED vertices. Flat they tile the square exactly;
+   folded they are the swan. Because the facets index into one vertex list, a
+   shared edge can never come apart, so every frame is a whole sheet of paper.
+   The last stretch slides the next chapter up over the finished bird. ---- */
 (function(){
-  var sec=$("#fold"),g=$("#foldG"),cap=$("#foldCap"),hint=$("#foldHint"),shadow=$("#foldShadow");
+  var sec=$("#fold"),g=$("#foldG"),cap=$("#foldCap"),hint=$("#foldHint"),
+      shadow=$("#foldShadow"),wipe=$("#foldWipe");
   if(!sec||!g)return;
   var F=$$(".fct",g),N=F.length;
-  if(N!==7)return;
+  if(N!==10)return;
 
-  var FLAT =[[160,40],[160,240],[60,140],[260,140],[60,240],[260,240],
-             [110,40],[60,90],[60,40],[210,40],[260,40]];
-  var CRANE=[[152,110],[150,216],[104,150],[198,150],[6,104],[316,116],
-             [62,28],[40,50],[10,64],[288,38],[300,62]];
-  var FACETS=[[3,5,1],[0,9,10,3],[0,3,1],[0,1,2],[2,4,1],[0,6,7,2],[6,8,7]];
-  var CX=160,CY=140;
+  var FLAT=[[200,20],[200,300],[60,160],[340,160],[130,20],[60,90],[95,20],[60,55],
+            [77,20],[60,37],[60,20],[270,20],[340,20],[340,230],[340,300],[60,300]];
+  var SWAN=[[214,148],[200,272],[146,192],[290,180],[208,98],[172,112],[188,52],[152,62],
+            [140,26],[108,42],[62,52],[306,88],[338,96],[296,236],[238,276],[142,244]];
+  var FACETS=[[0,11,12,3],[3,13,1],[13,14,1],[2,15,1],[0,3,1],
+              [0,1,2],[0,4,5,2],[4,6,7,5],[6,8,9,7],[8,10,9]];
+  var CX=200,CY=160;
 
-  // the gathered middle: halfway between the two, drawn in towards the centre
+  // a gathered middle: halfway between flat and swan, drawn in towards the centre
   var MID=[],i,j;
   for(i=0;i<FLAT.length;i++){
-    var mx=FLAT[i][0]+(CRANE[i][0]-FLAT[i][0])*0.5,
-        my=FLAT[i][1]+(CRANE[i][1]-FLAT[i][1])*0.5;
-    MID.push([CX+(mx-CX)*0.78,CY+(my-CY)*0.78]);
+    var mx=FLAT[i][0]+(SWAN[i][0]-FLAT[i][0])*0.5,
+        my=FLAT[i][1]+(SWAN[i][1]-FLAT[i][1])*0.5;
+    MID.push([CX+(mx-CX)*0.8,CY+(my-CY)*0.8]);
   }
 
+  // the fold runs over the first stretch, then it holds, then the page hands over
+  var FOLD_END=0.68,HOLD_END=0.84;
   var LINES=["One square of paper, nothing folded yet.",
              "The first creases go in.",
              "The corners lift and it takes shape.",
-             "A crane. The same single sheet."];
+             "A swan. The same single sheet."];
 
   function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+  function clamp01(v){return v<0?0:(v>1?1:v)}
   var V=[];for(i=0;i<FLAT.length;i++)V.push([0,0]);
 
   var lastLine=-1;
   function draw(p){
-    var e=ease(p),t=e*2,lo,hi,f;
-    if(t<1){lo=FLAT;hi=MID;f=t}else{lo=MID;hi=CRANE;f=t-1}
+    var fp=clamp01(p/FOLD_END);          // the folding itself
+    var wp=clamp01((p-HOLD_END)/(1-HOLD_END)); // the hand-over
+    var e=ease(fp),t=e*2,lo,hi,f;
+    if(t<1){lo=FLAT;hi=MID;f=t}else{lo=MID;hi=SWAN;f=t-1}
     for(i=0;i<V.length;i++){
       V[i][0]=lo[i][0]+(hi[i][0]-lo[i][0])*f;
       V[i][1]=lo[i][1]+(hi[i][1]-lo[i][1])*f;
     }
     for(i=0;i<N;i++){
       var idx=FACETS[i],out="";
-      for(j=0;j<idx.length;j++){
-        out+=(j?" ":"")+V[idx[j]][0].toFixed(1)+","+V[idx[j]][1].toFixed(1);
-      }
+      for(j=0;j<idx.length;j++)out+=(j?" ":"")+V[idx[j]][0].toFixed(1)+","+V[idx[j]][1].toFixed(1);
       F[i].setAttribute("points",out);
     }
-    // a slight turn and squeeze through the middle, so the sheet reads as turning
-    var sx=1-0.17*Math.sin(Math.PI*p);
+    // a slight turn and squeeze through the middle, then it settles and lifts away
+    // the sheet comes forward as it folds, then lifts away at the hand-over
+    var sx=1-0.16*Math.sin(Math.PI*fp),lift=12*e+46*ease(wp),
+        sc=(0.70+0.30*e)*(1+0.07*ease(wp));
     g.setAttribute("transform",
-      "translate("+CX+" "+CY+") rotate("+(-5*e).toFixed(2)+") scale("+sx.toFixed(3)+" 1) translate("+(-CX)+" "+(-CY-12*e).toFixed(1)+")");
+      "translate("+CX+" "+CY+") rotate("+(-4*e).toFixed(2)+") scale("+(sx*sc).toFixed(3)+" "+sc.toFixed(3)+") translate("+(-CX)+" "+(-CY-lift).toFixed(1)+")");
     if(shadow){
-      shadow.setAttribute("rx",(104*sx-18*e).toFixed(1));
-      shadow.setAttribute("opacity",(0.09+0.15*e).toFixed(3));
+      shadow.setAttribute("rx",(132*sx-26*e).toFixed(1));
+      shadow.setAttribute("opacity",(0.09+0.14*e-0.1*ease(wp)).toFixed(3));
     }
-    var li=p<.28?0:(p<.58?1:(p<.8?2:3));
+    if(wipe)wipe.style.transform="translate3d(0,"+((1-ease(wp))*100).toFixed(2)+"%,0)";
+    var li=fp<.3?0:(fp<.62?1:(fp<.9?2:3));
     if(cap&&li!==lastLine){
       lastLine=li;
       var sp=cap.firstElementChild;
@@ -831,28 +839,26 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
       if(RM){sp.textContent=LINES[li]}
       else{
         cap.classList.add("is-out");
-        setTimeout(function(){sp.textContent=LINES[li];cap.classList.remove("is-out")},230);
+        setTimeout(function(){sp.textContent=LINES[li];cap.classList.remove("is-out")},220);
       }
     }
-    if(hint)hint.classList.toggle("is-done",p>.82);
+    if(hint)hint.classList.toggle("is-done",p>.6);
   }
 
-  if(RM){draw(1);return}
+  if(RM){draw(FOLD_END);return}
 
-  // the scroll sets a target; the shape eases towards it so the fold never jumps
+  // the scroll sets a target; the shape eases towards it so nothing ever jumps
   var target=0,cur=0,raf=0;
   function tick(){
     raf=0;
-    cur+=(target-cur)*0.1;
-    if(Math.abs(target-cur)<0.0008)cur=target;
+    cur+=(target-cur)*0.12;
+    if(Math.abs(target-cur)<0.0006)cur=target;
     draw(cur);
     if(cur!==target)raf=requestAnimationFrame(tick);
   }
   function step(){
-    var r=sec.getBoundingClientRect(),h=window.innerHeight;
-    var from=h*0.82,to=-r.height*0.1;
-    var p=(from-r.top)/(from-to);
-    target=p<0?0:(p>1?1:p);
+    var r=sec.getBoundingClientRect(),span=r.height-window.innerHeight;
+    target=span>0?clamp01(-r.top/span):0;
     if(!raf)raf=requestAnimationFrame(tick);
   }
   onScroll(step);

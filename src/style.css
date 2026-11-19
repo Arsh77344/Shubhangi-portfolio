@@ -816,30 +816,40 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 .fold .olink,.contact .olink,.foot .olink{color:var(--on-wine);text-decoration-color:rgba(214,179,124,.6)}
 .fold .olink:hover,.contact .olink:hover,.foot .olink:hover{color:var(--on-wine);text-decoration-color:var(--on-wine)}
 
-/* --- the fold: a flat sheet becomes a crane --- */
-.fold{position:relative;background:var(--wine-deep);color:var(--on-wine);overflow:hidden;padding:clamp(70px,9vw,140px) 0}
-.fold::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(60% 55% at 72% 46%,rgba(214,179,124,.17),transparent 70%)}
-.fold__in{position:relative;z-index:1;max-width:var(--max);margin:0 auto;padding:0 var(--gutter);
-  display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.18fr);gap:clamp(30px,4vw,64px);align-items:center;
-  min-height:clamp(440px,64vh,700px)}
-.fold__eyebrow{color:var(--brass-light)}
+/* --- the fold: the page folds itself into a swan, then hands over --- */
+.fold{position:relative;height:300vh;background:var(--wine-deep)}
+.fold__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
+  background:var(--wine-deep);color:var(--on-wine);text-align:center}
+.fold__stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 52% at 50% 54%,rgba(214,179,124,.2),transparent 74%)}
+/* the bird takes the screen; everything else sits over it */
+.fold__svg{position:absolute;left:50%;top:55%;transform:translate(-50%,-50%);
+  width:min(97vw,1180px);max-height:84vh;height:auto;overflow:visible;
+  filter:drop-shadow(0 34px 42px rgba(0,0,0,.45))}
+.fct{stroke:rgba(58,10,28,.32);stroke-width:.4;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.f0{fill:#E8DAC0}.f1{fill:#C9B596}.f2{fill:#BCA586}.f3{fill:#CDBA9A}.f4{fill:#DCCBAE}
+.f5{fill:#F6ECDC}.f6{fill:#F2E7D5}.f7{fill:#F7EEE0}.f8{fill:#FAF4EA}.f9{fill:#E6D8BE}
+.fold__shadow{fill:#16040c;opacity:.1}
+.fold__copy{position:absolute;z-index:2;left:50%;transform:translateX(-50%);
+  top:clamp(16px,4.4vh,54px);width:min(92vw,44ch)}
+.fold__eyebrow{color:var(--brass-light);justify-content:center;margin-bottom:14px}
 .fold__eyebrow::before{background:currentColor}
-.fold h2{color:var(--on-wine)}
-.fold__cap{font-family:var(--display);font-size:clamp(1.1rem,1.5vw,1.4rem);line-height:1.4;color:var(--brass-light);margin:30px 0 18px;min-height:2.8em}
-.fold__cap span{display:inline-block;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.fold h2{color:var(--on-wine);margin:0;font-size:clamp(1.3rem,2.2vw,2.05rem);line-height:1.2}
+.fold__cap{position:absolute;z-index:2;left:50%;transform:translateX(-50%);
+  bottom:clamp(50px,8vh,86px);width:min(92vw,34ch);margin:0;
+  font-family:var(--display);font-size:clamp(1.05rem,1.55vw,1.45rem);line-height:1.4;
+  color:var(--brass-light);min-height:2.2em}
+.fold__cap span{display:inline-block;transition:opacity .45s var(--ease),transform .45s var(--ease)}
 .fold__cap.is-out span{opacity:0;transform:translateY(-8px)}
-.fold__note{color:var(--on-wine-soft);font-size:.95rem;max-width:44ch;margin:0}
-.fold__stage{display:grid;place-items:center;gap:18px}
-.fold__svg{width:min(100%,620px);height:auto;overflow:visible;
-  filter:drop-shadow(0 26px 30px rgba(0,0,0,.4))}
-.fct{stroke:rgba(58,10,28,.4);stroke-width:.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-.f0{fill:#BFA98A}.f1{fill:#D9C7A9}.f2{fill:#CBB89A}.f3{fill:#F1E6D4}
-.f4{fill:#FAF3E9}.f5{fill:#F6EBDB}.f6{fill:#E2D3B8}
-.fold__shadow{fill:#1d0510;opacity:.1}
-.fold__hint{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(247,239,227,.42);margin:0;transition:opacity .5s}
+.fold__hint{position:absolute;z-index:2;left:50%;transform:translateX(-50%);
+  bottom:clamp(18px,3vh,32px);margin:0;font-size:.7rem;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(247,239,227,.4);transition:opacity .5s}
 .fold__hint.is-done{opacity:0}
 .reduced .fold__hint{display:none}
+/* the next chapter slides up over the finished swan, like a fresh sheet of paper */
+.fold__wipe{position:absolute;left:-6%;right:-6%;bottom:0;height:116%;z-index:3;
+  background:var(--paper);transform:translate3d(0,100%,0);will-change:transform;
+  clip-path:polygon(0 5.5%,24% 1.6%,53% 4.4%,78% .8%,100% 5%,100% 100%,0 100%)}
 
 /* --- the mobile menu --- */
 .hdr__burger{display:none;position:relative;width:46px;height:46px;flex:none;align-items:center;justify-content:center;gap:5px;flex-direction:column}
@@ -892,11 +902,8 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .arcd__open{width:100%;justify-content:center}
   .hdr__burger{display:flex}
   .hdr .hdr__nav a:not(.hdr__cta){display:none}
-  .fold__in{grid-template-columns:1fr;gap:34px;min-height:0;text-align:center}
-  .fold__copy{max-width:600px;margin:0 auto}
-  .fold__note{margin:0 auto}
-  .fold__eyebrow{justify-content:center}
-  .fold__svg{width:min(94%,500px)}
+  .fold{height:280vh}
+  .fold__svg{width:98vw;max-height:72vh;top:56%}
 }
 
 /* phones */
@@ -914,9 +921,9 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .arci{min-height:56px;padding:13px 8px 13px 11px;gap:1px 12px}
   .arci__t{font-size:1rem}
   .arcr.is-sel>.arci{padding-left:16px}
-  .fold{padding:clamp(56px,12vw,90px) 0}
-  .fold__cap{margin:20px 0 14px;font-size:1.05rem}
-  .fold__svg{width:min(96%,380px)}
+  .fold{height:230vh}
+  .fold__svg{width:100vw;max-height:64vh;top:54%}
+  .fold__cap{font-size:1rem;min-height:3.2em;bottom:clamp(44px,7vh,70px)}
   .stats4{gap:20px 16px}
   .ways li{padding:22px 0}
   .ways h3{gap:14px;font-size:1.3rem}
