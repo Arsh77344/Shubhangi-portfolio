@@ -25,7 +25,7 @@ tools/bake_backgrounds.py  ← only needed if you change the two background artw
 1. Create a new repository on GitHub (e.g. `portfolio`), public.
 2. Upload everything in this folder (drag the files into the repo page, or use git:
    `git init && git add . && git commit -m "First version" && git branch -M main && git remote add origin <repo-url> && git push -u origin main`).
-3. In the repo go to **Settings → Pages**. Under **Build and deployment** choose **Deploy from a branch**, branch **main**, folder **/ (root)**, then **Save**.
+3. In the repo go to **Settings → Pages**. Under **Build and deployment** choose **Deploy from a branch**, branch **main**, folder **/ (root)**, then **Save**. (This step can only be done by the repository owner — it cannot be switched on from a script or a workflow.)
 4. After a minute the site is live at `https://<username>.github.io/<repo>/`.
 5. Optional custom domain: in the same Pages screen add your domain under **Custom domain**, then add the DNS records GitHub shows you.
 
