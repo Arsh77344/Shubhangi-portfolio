@@ -838,8 +838,8 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 .fold::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(60% 55% at 72% 46%,rgba(214,179,124,.17),transparent 70%)}
 .fold__in{position:relative;z-index:1;max-width:var(--max);margin:0 auto;padding:0 var(--gutter);
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(34px,5vw,80px);align-items:center;
-  min-height:clamp(400px,58vh,620px)}
+  display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.18fr);gap:clamp(30px,4vw,64px);align-items:center;
+  min-height:clamp(440px,64vh,700px)}
 .fold__eyebrow{color:var(--brass-light)}
 .fold__eyebrow::before{background:currentColor}
 .fold h2{color:var(--on-wine)}
@@ -848,11 +848,12 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 .fold__cap.is-out span{opacity:0;transform:translateY(-8px)}
 .fold__note{color:var(--on-wine-soft);font-size:.95rem;max-width:44ch;margin:0}
 .fold__stage{display:grid;place-items:center;gap:18px}
-.fold__svg{width:min(100%,460px);height:auto;overflow:visible;
+.fold__svg{width:min(100%,620px);height:auto;overflow:visible;
   filter:drop-shadow(0 26px 30px rgba(0,0,0,.4))}
-.fct{stroke:rgba(58,10,28,.45);stroke-width:.6;stroke-linejoin:round}
-.f0{fill:#F7EFE3}.f1{fill:#F1E5D2}.f2{fill:#E0D1B6}.f3{fill:#EFE3CF}
-.f4{fill:#CFBA99}.f5{fill:#E7D9C0}.f6{fill:#F5ECDF}.f7{fill:#D6C4A6}
+.fct{stroke:rgba(58,10,28,.4);stroke-width:.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.f0{fill:#BFA98A}.f1{fill:#D9C7A9}.f2{fill:#CBB89A}.f3{fill:#F1E6D4}
+.f4{fill:#FAF3E9}.f5{fill:#F6EBDB}.f6{fill:#E2D3B8}
+.fold__shadow{fill:#1d0510;opacity:.1}
 .fold__hint{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(247,239,227,.42);margin:0;transition:opacity .5s}
 .fold__hint.is-done{opacity:0}
 .reduced .fold__hint{display:none}
@@ -912,7 +913,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .fold__copy{max-width:600px;margin:0 auto}
   .fold__note{margin:0 auto}
   .fold__eyebrow{justify-content:center}
-  .fold__svg{width:min(100%,380px)}
+  .fold__svg{width:min(94%,500px)}
 }
 
 /* phones */
@@ -932,7 +933,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .arcr.is-sel>.arci{padding-left:16px}
   .fold{padding:clamp(56px,12vw,90px) 0}
   .fold__cap{margin:20px 0 14px;font-size:1.05rem}
-  .fold__svg{width:min(86%,320px)}
+  .fold__svg{width:min(96%,380px)}
   .stats4{gap:20px 16px}
   .ways li{padding:22px 0}
   .ways h3{gap:14px;font-size:1.3rem}
@@ -1564,17 +1565,17 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
       <p class="fold__note">Every certificate, role and market above started the same way: nothing yet, and a plan for what it could become.</p>
     </div>
     <div class="fold__stage">
-      <svg class="fold__svg" id="foldSvg" viewBox="0 0 240 200" role="img" aria-labelledby="foldSvgT">
+      <svg class="fold__svg" id="foldSvg" viewBox="-14 -6 348 266" role="img" aria-labelledby="foldSvgT">
         <title id="foldSvgT">A square of paper folding into a paper crane</title>
+        <ellipse class="fold__shadow" id="foldShadow" cx="160" cy="244" rx="100" ry="9"/>
         <g id="foldG">
-          <polygon class="fct f0" points="120,100 40,20 120,20"/>
-          <polygon class="fct f1" points="120,100 120,20 200,20"/>
-          <polygon class="fct f2" points="120,100 200,20 200,100"/>
-          <polygon class="fct f3" points="120,100 200,100 200,180"/>
-          <polygon class="fct f4" points="120,100 200,180 120,180"/>
-          <polygon class="fct f5" points="120,100 120,180 40,180"/>
-          <polygon class="fct f6" points="120,100 40,180 40,100"/>
-          <polygon class="fct f7" points="120,100 40,100 40,20"/>
+          <polygon class="fct f0" points="198,150 316,116 150,216"/>
+          <polygon class="fct f1" points="152,110 288,38 300,62 198,150"/>
+          <polygon class="fct f2" points="152,110 198,150 150,216"/>
+          <polygon class="fct f3" points="152,110 150,216 104,150"/>
+          <polygon class="fct f4" points="104,150 6,104 150,216"/>
+          <polygon class="fct f5" points="152,110 62,28 40,50 104,150"/>
+          <polygon class="fct f6" points="62,28 10,64 40,50"/>
         </g>
       </svg>
       <p class="fold__hint" id="foldHint">Keep scrolling</p>
@@ -2693,60 +2694,97 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
   else if(wide.addListener)wide.addListener(mode);
 })();
 
-/* ---- the fold: one square of paper becomes a crane as you scroll past ---- */
+/* ---- the fold: one square of paper becomes a paper crane as you scroll past ----
+   Seven paper facets over eleven SHARED vertices. Flat, they tile the square
+   exactly; folded, they are the crane. Because the facets index into one vertex
+   list, every shared edge stays shared at every step -- the sheet bends, and it
+   can never come apart. A gathered middle and a slight turn carry it across. ---- */
 (function(){
-  var sec=$("#fold"),g=$("#foldG"),cap=$("#foldCap"),hint=$("#foldHint");
+  var sec=$("#fold"),g=$("#foldG"),cap=$("#foldCap"),hint=$("#foldHint"),shadow=$("#foldShadow");
   if(!sec||!g)return;
-  var fct=$$(".fct",g);if(fct.length!==8)return;
-  // the eight rim points at each stage; every facet is (centre, Pi, Pi+1)
-  var C=[[120,100],[120,100],[112,104]];
-  var P=[
-    // flat: a square, corners and edge middles
-    [[40,20],[120,20],[200,20],[200,100],[200,180],[120,180],[40,180],[40,100]],
-    // gathered: a tall diamond, the sheet collected along its creases
-    [[86,48],[120,22],[154,48],[168,104],[150,152],[120,178],[90,152],[72,104]],
-    // the crane: tips at 0,2,4,6 (beak, wing, tail, body) with notches between them
-    [[4,46],[124,2],[240,26],[158,124],[118,176],[76,112],[100,82],[150,80]]
-  ];
-  // the crane rim is authored tip-first; put it back in rim order 0..7
-  P[2]=[P[2][0],P[2][6],P[2][1],P[2][7],P[2][2],P[2][3],P[2][4],P[2][5]];
-  var LINES=["The paper starts flat.","A few deliberate folds.","A crane. The same single sheet."];
-  var lastLine=-1,lastP=-1;
-  function lerp(a,b,t){return a+(b-a)*t}
-  function pts(i,t){
-    // t runs 0..2 across the three stages
-    var s=t<1?0:1,f=t<1?t:t-1;
-    var c=[lerp(C[s][0],C[s+1][0],f),lerp(C[s][1],C[s+1][1],f)];
-    var A=P[s][i],B=P[s+1][i],A2=P[s][(i+1)%8],B2=P[s+1][(i+1)%8];
-    return c[0].toFixed(1)+","+c[1].toFixed(1)+" "+
-           lerp(A[0],B[0],f).toFixed(1)+","+lerp(A[1],B[1],f).toFixed(1)+" "+
-           lerp(A2[0],B2[0],f).toFixed(1)+","+lerp(A2[1],B2[1],f).toFixed(1);
+  var F=$$(".fct",g),N=F.length;
+  if(N!==7)return;
+
+  var FLAT =[[160,40],[160,240],[60,140],[260,140],[60,240],[260,240],
+             [110,40],[60,90],[60,40],[210,40],[260,40]];
+  var CRANE=[[152,110],[150,216],[104,150],[198,150],[6,104],[316,116],
+             [62,28],[40,50],[10,64],[288,38],[300,62]];
+  var FACETS=[[3,5,1],[0,9,10,3],[0,3,1],[0,1,2],[2,4,1],[0,6,7,2],[6,8,7]];
+  var CX=160,CY=140;
+
+  // the gathered middle: halfway between the two, drawn in towards the centre
+  var MID=[],i,j;
+  for(i=0;i<FLAT.length;i++){
+    var mx=FLAT[i][0]+(CRANE[i][0]-FLAT[i][0])*0.5,
+        my=FLAT[i][1]+(CRANE[i][1]-FLAT[i][1])*0.5;
+    MID.push([CX+(mx-CX)*0.78,CY+(my-CY)*0.78]);
   }
+
+  var LINES=["One square of paper, nothing folded yet.",
+             "The first creases go in.",
+             "The corners lift and it takes shape.",
+             "A crane. The same single sheet."];
+
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+  var V=[];for(i=0;i<FLAT.length;i++)V.push([0,0]);
+
+  var lastLine=-1;
   function draw(p){
-    if(Math.abs(p-lastP)<0.004)return;
-    lastP=p;
-    var e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;   // ease in and out
-    var t=e*2;
-    for(var i=0;i<8;i++)fct[i].setAttribute("points",pts(i,t));
-    g.setAttribute("transform","rotate("+(-7*e).toFixed(2)+" 120 100) translate(0 "+(-12*e).toFixed(1)+")");
-    var li=p<.34?0:(p<.72?1:2);
+    var e=ease(p),t=e*2,lo,hi,f;
+    if(t<1){lo=FLAT;hi=MID;f=t}else{lo=MID;hi=CRANE;f=t-1}
+    for(i=0;i<V.length;i++){
+      V[i][0]=lo[i][0]+(hi[i][0]-lo[i][0])*f;
+      V[i][1]=lo[i][1]+(hi[i][1]-lo[i][1])*f;
+    }
+    for(i=0;i<N;i++){
+      var idx=FACETS[i],out="";
+      for(j=0;j<idx.length;j++){
+        out+=(j?" ":"")+V[idx[j]][0].toFixed(1)+","+V[idx[j]][1].toFixed(1);
+      }
+      F[i].setAttribute("points",out);
+    }
+    // a slight turn and squeeze through the middle, so the sheet reads as turning
+    var sx=1-0.17*Math.sin(Math.PI*p);
+    g.setAttribute("transform",
+      "translate("+CX+" "+CY+") rotate("+(-5*e).toFixed(2)+") scale("+sx.toFixed(3)+" 1) translate("+(-CX)+" "+(-CY-12*e).toFixed(1)+")");
+    if(shadow){
+      shadow.setAttribute("rx",(104*sx-18*e).toFixed(1));
+      shadow.setAttribute("opacity",(0.09+0.15*e).toFixed(3));
+    }
+    var li=p<.28?0:(p<.58?1:(p<.8?2:3));
     if(cap&&li!==lastLine){
       lastLine=li;
       var sp=cap.firstElementChild;
       if(!sp){cap.innerHTML="<span></span>";sp=cap.firstElementChild}
       if(RM){sp.textContent=LINES[li]}
-      else{cap.classList.add("is-out");
-        setTimeout(function(){sp.textContent=LINES[li];cap.classList.remove("is-out")},260)}
+      else{
+        cap.classList.add("is-out");
+        setTimeout(function(){sp.textContent=LINES[li];cap.classList.remove("is-out")},230);
+      }
     }
-    if(hint)hint.classList.toggle("is-done",p>.8);
+    if(hint)hint.classList.toggle("is-done",p>.82);
   }
+
   if(RM){draw(1);return}
+
+  // the scroll sets a target; the shape eases towards it so the fold never jumps
+  var target=0,cur=0,raf=0;
+  function tick(){
+    raf=0;
+    cur+=(target-cur)*0.1;
+    if(Math.abs(target-cur)<0.0008)cur=target;
+    draw(cur);
+    if(cur!==target)raf=requestAnimationFrame(tick);
+  }
   function step(){
     var r=sec.getBoundingClientRect(),h=window.innerHeight;
-    var from=h*0.88,to=-r.height*0.25;
-    draw(clamp((from-r.top)/(from-to),0,1));
+    var from=h*0.82,to=-r.height*0.1;
+    var p=(from-r.top)/(from-to);
+    target=p<0?0:(p>1?1:p);
+    if(!raf)raf=requestAnimationFrame(tick);
   }
-  onScroll(step);step();
+  onScroll(step);
+  draw(0);step();
 })();
 
 })();

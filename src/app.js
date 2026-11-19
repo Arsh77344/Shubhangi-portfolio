@@ -766,60 +766,97 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
   else if(wide.addListener)wide.addListener(mode);
 })();
 
-/* ---- the fold: one square of paper becomes a crane as you scroll past ---- */
+/* ---- the fold: one square of paper becomes a paper crane as you scroll past ----
+   Seven paper facets over eleven SHARED vertices. Flat, they tile the square
+   exactly; folded, they are the crane. Because the facets index into one vertex
+   list, every shared edge stays shared at every step -- the sheet bends, and it
+   can never come apart. A gathered middle and a slight turn carry it across. ---- */
 (function(){
-  var sec=$("#fold"),g=$("#foldG"),cap=$("#foldCap"),hint=$("#foldHint");
+  var sec=$("#fold"),g=$("#foldG"),cap=$("#foldCap"),hint=$("#foldHint"),shadow=$("#foldShadow");
   if(!sec||!g)return;
-  var fct=$$(".fct",g);if(fct.length!==8)return;
-  // the eight rim points at each stage; every facet is (centre, Pi, Pi+1)
-  var C=[[120,100],[120,100],[112,104]];
-  var P=[
-    // flat: a square, corners and edge middles
-    [[40,20],[120,20],[200,20],[200,100],[200,180],[120,180],[40,180],[40,100]],
-    // gathered: a tall diamond, the sheet collected along its creases
-    [[86,48],[120,22],[154,48],[168,104],[150,152],[120,178],[90,152],[72,104]],
-    // the crane: tips at 0,2,4,6 (beak, wing, tail, body) with notches between them
-    [[4,46],[124,2],[240,26],[158,124],[118,176],[76,112],[100,82],[150,80]]
-  ];
-  // the crane rim is authored tip-first; put it back in rim order 0..7
-  P[2]=[P[2][0],P[2][6],P[2][1],P[2][7],P[2][2],P[2][3],P[2][4],P[2][5]];
-  var LINES=["The paper starts flat.","A few deliberate folds.","A crane. The same single sheet."];
-  var lastLine=-1,lastP=-1;
-  function lerp(a,b,t){return a+(b-a)*t}
-  function pts(i,t){
-    // t runs 0..2 across the three stages
-    var s=t<1?0:1,f=t<1?t:t-1;
-    var c=[lerp(C[s][0],C[s+1][0],f),lerp(C[s][1],C[s+1][1],f)];
-    var A=P[s][i],B=P[s+1][i],A2=P[s][(i+1)%8],B2=P[s+1][(i+1)%8];
-    return c[0].toFixed(1)+","+c[1].toFixed(1)+" "+
-           lerp(A[0],B[0],f).toFixed(1)+","+lerp(A[1],B[1],f).toFixed(1)+" "+
-           lerp(A2[0],B2[0],f).toFixed(1)+","+lerp(A2[1],B2[1],f).toFixed(1);
+  var F=$$(".fct",g),N=F.length;
+  if(N!==7)return;
+
+  var FLAT =[[160,40],[160,240],[60,140],[260,140],[60,240],[260,240],
+             [110,40],[60,90],[60,40],[210,40],[260,40]];
+  var CRANE=[[152,110],[150,216],[104,150],[198,150],[6,104],[316,116],
+             [62,28],[40,50],[10,64],[288,38],[300,62]];
+  var FACETS=[[3,5,1],[0,9,10,3],[0,3,1],[0,1,2],[2,4,1],[0,6,7,2],[6,8,7]];
+  var CX=160,CY=140;
+
+  // the gathered middle: halfway between the two, drawn in towards the centre
+  var MID=[],i,j;
+  for(i=0;i<FLAT.length;i++){
+    var mx=FLAT[i][0]+(CRANE[i][0]-FLAT[i][0])*0.5,
+        my=FLAT[i][1]+(CRANE[i][1]-FLAT[i][1])*0.5;
+    MID.push([CX+(mx-CX)*0.78,CY+(my-CY)*0.78]);
   }
+
+  var LINES=["One square of paper, nothing folded yet.",
+             "The first creases go in.",
+             "The corners lift and it takes shape.",
+             "A crane. The same single sheet."];
+
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+  var V=[];for(i=0;i<FLAT.length;i++)V.push([0,0]);
+
+  var lastLine=-1;
   function draw(p){
-    if(Math.abs(p-lastP)<0.004)return;
-    lastP=p;
-    var e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;   // ease in and out
-    var t=e*2;
-    for(var i=0;i<8;i++)fct[i].setAttribute("points",pts(i,t));
-    g.setAttribute("transform","rotate("+(-7*e).toFixed(2)+" 120 100) translate(0 "+(-12*e).toFixed(1)+")");
-    var li=p<.34?0:(p<.72?1:2);
+    var e=ease(p),t=e*2,lo,hi,f;
+    if(t<1){lo=FLAT;hi=MID;f=t}else{lo=MID;hi=CRANE;f=t-1}
+    for(i=0;i<V.length;i++){
+      V[i][0]=lo[i][0]+(hi[i][0]-lo[i][0])*f;
+      V[i][1]=lo[i][1]+(hi[i][1]-lo[i][1])*f;
+    }
+    for(i=0;i<N;i++){
+      var idx=FACETS[i],out="";
+      for(j=0;j<idx.length;j++){
+        out+=(j?" ":"")+V[idx[j]][0].toFixed(1)+","+V[idx[j]][1].toFixed(1);
+      }
+      F[i].setAttribute("points",out);
+    }
+    // a slight turn and squeeze through the middle, so the sheet reads as turning
+    var sx=1-0.17*Math.sin(Math.PI*p);
+    g.setAttribute("transform",
+      "translate("+CX+" "+CY+") rotate("+(-5*e).toFixed(2)+") scale("+sx.toFixed(3)+" 1) translate("+(-CX)+" "+(-CY-12*e).toFixed(1)+")");
+    if(shadow){
+      shadow.setAttribute("rx",(104*sx-18*e).toFixed(1));
+      shadow.setAttribute("opacity",(0.09+0.15*e).toFixed(3));
+    }
+    var li=p<.28?0:(p<.58?1:(p<.8?2:3));
     if(cap&&li!==lastLine){
       lastLine=li;
       var sp=cap.firstElementChild;
       if(!sp){cap.innerHTML="<span></span>";sp=cap.firstElementChild}
       if(RM){sp.textContent=LINES[li]}
-      else{cap.classList.add("is-out");
-        setTimeout(function(){sp.textContent=LINES[li];cap.classList.remove("is-out")},260)}
+      else{
+        cap.classList.add("is-out");
+        setTimeout(function(){sp.textContent=LINES[li];cap.classList.remove("is-out")},230);
+      }
     }
-    if(hint)hint.classList.toggle("is-done",p>.8);
+    if(hint)hint.classList.toggle("is-done",p>.82);
   }
+
   if(RM){draw(1);return}
+
+  // the scroll sets a target; the shape eases towards it so the fold never jumps
+  var target=0,cur=0,raf=0;
+  function tick(){
+    raf=0;
+    cur+=(target-cur)*0.1;
+    if(Math.abs(target-cur)<0.0008)cur=target;
+    draw(cur);
+    if(cur!==target)raf=requestAnimationFrame(tick);
+  }
   function step(){
     var r=sec.getBoundingClientRect(),h=window.innerHeight;
-    var from=h*0.88,to=-r.height*0.25;
-    draw(clamp((from-r.top)/(from-to),0,1));
+    var from=h*0.82,to=-r.height*0.1;
+    var p=(from-r.top)/(from-to);
+    target=p<0?0:(p>1?1:p);
+    if(!raf)raf=requestAnimationFrame(tick);
   }
-  onScroll(step);step();
+  onScroll(step);
+  draw(0);step();
 })();
 
 })();

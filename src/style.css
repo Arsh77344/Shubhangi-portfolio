@@ -821,8 +821,8 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 .fold::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(60% 55% at 72% 46%,rgba(214,179,124,.17),transparent 70%)}
 .fold__in{position:relative;z-index:1;max-width:var(--max);margin:0 auto;padding:0 var(--gutter);
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(34px,5vw,80px);align-items:center;
-  min-height:clamp(400px,58vh,620px)}
+  display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.18fr);gap:clamp(30px,4vw,64px);align-items:center;
+  min-height:clamp(440px,64vh,700px)}
 .fold__eyebrow{color:var(--brass-light)}
 .fold__eyebrow::before{background:currentColor}
 .fold h2{color:var(--on-wine)}
@@ -831,11 +831,12 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 .fold__cap.is-out span{opacity:0;transform:translateY(-8px)}
 .fold__note{color:var(--on-wine-soft);font-size:.95rem;max-width:44ch;margin:0}
 .fold__stage{display:grid;place-items:center;gap:18px}
-.fold__svg{width:min(100%,460px);height:auto;overflow:visible;
+.fold__svg{width:min(100%,620px);height:auto;overflow:visible;
   filter:drop-shadow(0 26px 30px rgba(0,0,0,.4))}
-.fct{stroke:rgba(58,10,28,.45);stroke-width:.6;stroke-linejoin:round}
-.f0{fill:#F7EFE3}.f1{fill:#F1E5D2}.f2{fill:#E0D1B6}.f3{fill:#EFE3CF}
-.f4{fill:#CFBA99}.f5{fill:#E7D9C0}.f6{fill:#F5ECDF}.f7{fill:#D6C4A6}
+.fct{stroke:rgba(58,10,28,.4);stroke-width:.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.f0{fill:#BFA98A}.f1{fill:#D9C7A9}.f2{fill:#CBB89A}.f3{fill:#F1E6D4}
+.f4{fill:#FAF3E9}.f5{fill:#F6EBDB}.f6{fill:#E2D3B8}
+.fold__shadow{fill:#1d0510;opacity:.1}
 .fold__hint{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(247,239,227,.42);margin:0;transition:opacity .5s}
 .fold__hint.is-done{opacity:0}
 .reduced .fold__hint{display:none}
@@ -895,7 +896,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .fold__copy{max-width:600px;margin:0 auto}
   .fold__note{margin:0 auto}
   .fold__eyebrow{justify-content:center}
-  .fold__svg{width:min(100%,380px)}
+  .fold__svg{width:min(94%,500px)}
 }
 
 /* phones */
@@ -915,7 +916,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .arcr.is-sel>.arci{padding-left:16px}
   .fold{padding:clamp(56px,12vw,90px) 0}
   .fold__cap{margin:20px 0 14px;font-size:1.05rem}
-  .fold__svg{width:min(86%,320px)}
+  .fold__svg{width:min(96%,380px)}
   .stats4{gap:20px 16px}
   .ways li{padding:22px 0}
   .ways h3{gap:14px;font-size:1.3rem}
