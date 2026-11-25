@@ -267,16 +267,17 @@ p{margin:0 0 1.1em;max-width:64ch}
 @media (prefers-reduced-motion:reduce){.scard{opacity:1;transform:rotate(var(--r));transition:none}.scard__in{animation:none!important}}
 
 /* experience */
-.org{padding-top:clamp(80px,9vw,140px)}
-.org+.org{border-top:1px solid var(--rule);margin-top:clamp(80px,9vw,140px)}
-.org__head{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(24px,4vw,60px);align-items:end;margin-bottom:clamp(50px,6vw,80px)}
-.org__years{font-family:var(--display);font-weight:250;font-size:clamp(4.5rem,9vw,8.5rem);line-height:.8;color:var(--wine);letter-spacing:-.04em}
-.org__head h3{font-size:clamp(2.2rem,4vw,3.8rem);font-weight:380}
+.org{padding-top:clamp(50px,5vw,80px)}
+.orgindex+.org{padding-top:0}
+.org+.org{margin-top:clamp(70px,8vw,120px)}
+.org__head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px clamp(18px,2.6vw,40px);align-items:baseline;margin-bottom:clamp(34px,4vw,56px);padding-top:clamp(18px,2.2vw,30px);border-top:3px solid var(--wine)}
+.org__years{font-family:var(--display);font-weight:250;font-size:clamp(2.6rem,5vw,4.4rem);line-height:.85;color:var(--wine);letter-spacing:-.03em}
+.org__head h3{font-size:clamp(1.8rem,3.1vw,2.8rem);font-weight:380;line-height:1.05}
 .org__head .soft{margin:10px 0 0;font-size:.98rem}
-.org__intro{display:grid;grid-template-columns:1fr 1fr;gap:var(--gutter);margin-bottom:clamp(60px,7vw,100px)}
-.roles{list-style:none;margin:0 0 clamp(70px,8vw,120px);padding:0;position:relative}
+.org__intro{display:grid;grid-template-columns:1fr 1fr;gap:var(--gutter);margin-bottom:clamp(44px,5vw,70px)}
+.roles{list-style:none;margin:0 0 clamp(50px,6vw,84px);padding:0;position:relative}
 .roles::before{content:"";position:absolute;left:11px;top:14px;bottom:14px;width:1px;background:var(--rule-strong)}
-.rolei{position:relative;display:grid;grid-template-columns:1fr 1.5fr;gap:var(--gutter);padding:0 0 clamp(50px,5vw,70px) 52px}
+.rolei{position:relative;display:grid;grid-template-columns:1fr 1.5fr;gap:var(--gutter);padding:0 0 clamp(34px,3.4vw,50px) 52px}
 .rolei::before{content:"";position:absolute;left:4px;top:12px;width:15px;height:15px;border-radius:50%;background:var(--ivory);border:1px solid var(--wine)}
 .rolei.is-now::before{background:var(--wine);box-shadow:0 0 0 6px rgba(92,18,48,.12)}
 .rolei__when{font-size:.86rem;font-weight:700;color:var(--wine);margin-bottom:10px}
@@ -387,11 +388,15 @@ p{margin:0 0 1.1em;max-width:64ch}
 .cast__panel li span{font-size:.78rem;color:var(--ink-faint)}
 .cast__panel .hint{font-size:.8rem;font-weight:700;color:var(--wine);margin:14px 0 0}
 .feature{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(40px,6vw,100px);align-items:start}
-.collage{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:clamp(60px,6.4vw,92px);gap:14px}
-.collage figure{margin:0;overflow:hidden}
-.collage img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
-.collage figure:hover img{transform:scale(1.05)}
-.c1{grid-column:1/5;grid-row:1/4}.c2{grid-column:5/7;grid-row:1/3}.c3{grid-column:5/7;grid-row:3/6}.c4{grid-column:1/3;grid-row:4/6}.c5{grid-column:3/5;grid-row:4/6}
+/* a tidy mosaic: every cell has a fixed shape and the photo fills it */
+.collage{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.collage figure{margin:0;overflow:hidden;background:var(--sand)}
+.collage img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s var(--ease)}
+.collage .c1{grid-area:1/1/2/3;aspect-ratio:16/9}
+.collage .c3{grid-area:2/1/3/2;aspect-ratio:1/1}
+.collage .c2{grid-area:2/2/3/3;aspect-ratio:1/1}
+.collage .c4{grid-area:3/1/4/3;aspect-ratio:2/1}
+@media (hover:hover){.collage figure:hover img{transform:scale(1.04)}}
 .stats4{display:grid;grid-template-columns:1fr 1fr;gap:30px 24px;list-style:none;margin:30px 0 34px;padding:0}
 .stats4 strong{display:block;font-family:var(--display);font-weight:330;font-size:clamp(2.2rem,3vw,3rem);line-height:1;color:var(--wine);margin-bottom:6px}
 .stats4 span{font-size:.9rem;color:var(--ink-soft)}
@@ -523,14 +528,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 .about__photo img,.contact__photo img{aspect-ratio:auto;height:auto;object-fit:contain}
 .tile img{height:auto;object-fit:contain;display:block}
 .tile:not(.tile--type){height:auto!important;background:var(--paper)}
-.collage{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:auto;gap:14px;align-items:start}
-.collage figure{margin:0}
-.collage .c1{grid-column:1/3!important;grid-row:1!important}
-.collage .c3{grid-column:1!important;grid-row:2!important}
-.collage .c4{grid-column:2!important;grid-row:2!important}
-.collage .c2{grid-column:1!important;grid-row:3!important;width:58%;justify-self:start}
-.collage img{height:auto;object-fit:contain}
-.collage figure:hover img{transform:none}
+
 .page__gallery{align-items:start}
 .page__gallery img,.g-wide img,.g-mid img,.g-half img,.g-third img{aspect-ratio:auto;height:auto;object-fit:contain}
 
@@ -883,7 +881,6 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .arci__m{grid-column:2;font-size:.72rem;white-space:normal}
   .arci__f{grid-row:1;grid-column:3}
   .lift__panel{grid-template-columns:repeat(2,1fr);gap:34px 26px}
-  .collage{grid-auto-rows:clamp(54px,6vw,80px)}
 }
 
 /* portrait tablets: two columns, not one. One column here is what made the page endless. */
@@ -1035,3 +1032,42 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .favour__logo{max-width:320px}
   .favour__shot{max-width:420px}
 }
+
+/* the two chapters, announced before you walk into them */
+.orgindex{list-style:none;margin:0 0 clamp(44px,5vw,76px);padding:0;border-top:1px solid var(--rule-strong)}
+.orgindex a{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:baseline;
+  gap:6px clamp(18px,2.6vw,46px);padding:22px 4px 22px 0;border-bottom:1px solid var(--rule);
+  text-decoration:none;color:inherit;transition:padding-left .4s var(--ease),color .3s}
+.orgindex__yr{font-size:.8rem;font-weight:800;letter-spacing:.08em;color:var(--brass);white-space:nowrap}
+.orgindex b{font-family:var(--display);font-weight:400;font-size:clamp(1.3rem,2.1vw,1.9rem);line-height:1.1}
+.orgindex__n{font-size:.88rem;color:var(--ink-faint)}
+.orgindex svg{color:var(--wine);opacity:.4;transition:opacity .3s,transform .4s var(--ease)}
+@media (hover:hover){
+  .orgindex a:hover{padding-left:16px;color:var(--wine)}
+  .orgindex a:hover svg{opacity:1;transform:translateX(6px)}
+}
+.orgindex a:focus-visible{padding-left:16px;color:var(--wine)}
+@media (max-width:760px){
+  .orgindex a{grid-template-columns:minmax(0,1fr) auto;padding:16px 0}
+  .orgindex__yr{grid-column:1/-1}
+  .orgindex b{grid-column:1;grid-row:2}
+  .orgindex svg{grid-column:2;grid-row:2;align-self:center}
+  .orgindex__n{grid-column:1/-1;grid-row:3;margin-top:2px}
+}
+
+/* a company name set this large should not read as a raw hyperlink */
+.org__head h3 .olink{text-decoration:none;
+  background:linear-gradient(var(--brass),var(--brass)) 0 100%/0 1px no-repeat;
+  transition:background-size .45s var(--ease),color .3s}
+.org__head h3 .olink .ext{opacity:0;transition:opacity .3s}
+@media (hover:hover){
+  .org__head h3 .olink:hover{background-size:100% 1px}
+  .org__head h3 .olink:hover .ext{opacity:.6}
+}
+.org__head h3 .olink:focus-visible{background-size:100% 1px}
+.org__head h3 .olink:focus-visible .ext{opacity:.6}
+
+/* the experience heading is broken on purpose, so give it its own measure */
+#experience .sec-head{align-items:end}
+#experience .sec-head h2{line-height:.98;letter-spacing:-.022em}
+@media (max-width:760px){#experience .sec-head h2 br{display:none}}
