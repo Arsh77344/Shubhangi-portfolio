@@ -163,22 +163,24 @@ function setFlaps(el,text){
   var canvas=$("#globe");if(!canvas||typeof window.d3==="undefined"||typeof window.topojson==="undefined")return;
   var ctx=canvas.getContext("2d");
   var land=topojson.feature(LAND,LAND.objects.land),grat=d3.geoGraticule10();
-  var C={lucknow:[80.95,26.85],delhi:[77.21,28.61],pune:[73.86,18.52],leeds:[-1.55,53.80]};
-  var names={lucknow:"Lucknow",delhi:"Delhi NCR",pune:"Pune",leeds:"Leeds"};
-  var legs=[["lucknow","delhi"],["delhi","pune"],["pune","leeds"],["leeds","lucknow"]];
+  var C={lucknow:[80.95,26.85],delhi:[77.21,28.61],mysore:[76.64,12.31],trivandrum:[76.95,8.52],pune:[73.86,18.52],leeds:[-1.55,53.80]};
+  var names={lucknow:"Lucknow",delhi:"Delhi NCR",mysore:"Mysore",trivandrum:"Trivandrum",pune:"Pune",leeds:"Leeds"};
+  var legs=[["lucknow","delhi"],["delhi","mysore"],["mysore","trivandrum"],["trivandrum","pune"],["pune","leeds"],["leeds","lucknow"]];
   var side=[{n:"Mumbai",c:[72.88,19.08]},{n:"Hanoi",c:[105.85,21.03]},{n:"Bangkok",c:[100.5,13.75]},{n:"Chengdu",c:[104.07,30.57]}];
   var asia=[93,22];
   var BOARD=[
     {y:"----",to:"LUCKNOW",f:"HOME",t:"Lucknow",d:"Where it starts, and where it brought me back."},
     {y:"2014",to:"DELHI NCR",f:"B.TECH",t:"Delhi NCR, 2014",d:"Four years at SRM Institute studying Information Technology, graduating with Distinction."},
-    {y:"2018",to:"PUNE",f:"INFOSYS",t:"Pune, 2018",d:"Infosys: from systems engineer to associate consultant for global banks and Lloyd’s Register."},
+    {y:"2018",to:"MYSORE",f:"INFOSYS",t:"Mysore, 2018",d:"Infosys begins: training at the Mysore campus before the first posting."},
+    {y:"2018",to:"TRIVANDRUM",f:"INFOSYS",t:"Trivandrum, 2018",d:"First delivery role: data conversion and validation for XPO Logistics."},
+    {y:"2019",to:"PUNE",f:"INFOSYS",t:"Pune, 2019",d:"Systems engineering, then consulting, for Bank of America, UBS and Lloyd\u2019s Register."},
     {y:"2022",to:"LEEDS",f:"MSC",t:"Leeds, 2022",d:"An MSc at the University of Leeds, then three roles at Luminate Education Group."},
     {y:"2026",to:"LUCKNOW",f:"S. ASIA",t:"Lucknow, 2026",d:"Back home, now leading recruitment for South Asia, remotely."},
     {y:"2025",to:"ON TOUR",f:"EVENTS",t:"On the road",d:"Delegations, fairs and launch events in Mumbai, Hanoi, Bangkok and Chengdu."}
   ];
   var fy=$("#flYear"),fc=$("#flCity"),ff=$("#flFor"),status=$("#boardStatus"),jT=$("#jTitle"),jD=$("#jText");
   [fy,fc,ff].forEach(buildFlaps);
-  var HOLD0=1,TRAVEL=1.7,HOLD=1,FINAL_T=1.3,FINAL_H=1.3;
+  var HOLD0=.9,TRAVEL=1.45,HOLD=.85,FINAL_T=1.2,FINAL_H=1.2;
   var TOTAL=HOLD0+legs.length*(TRAVEL+HOLD)+FINAL_T+FINAL_H;
   var proj=d3.geoOrthographic().clipAngle(90).precision(.4),path=d3.geoPath(proj,ctx);
   var W=0,H=0,dpr=1,cx=0,cy=0,R=0;
@@ -206,8 +208,9 @@ function setFlaps(el,text){
       u-=HOLD;
     }
     s.done=legs.length;s.pos=C.lucknow;
-    if(u<FINAL_T){var t2=ease(u/FINAL_T);s.center=d3.geoInterpolate(C.lucknow,asia)(t2);s.zoom=1-.12*t2;s.sideA=t2;s.card=5;s.stop=t2<.5?4:5;return s}
-    s.center=asia;s.zoom=.88;s.sideA=1;s.card=5;s.stop=5;return s;
+    var LAST=legs.length+1;
+    if(u<FINAL_T){var t2=ease(u/FINAL_T);s.center=d3.geoInterpolate(C.lucknow,asia)(t2);s.zoom=1-.12*t2;s.sideA=t2;s.card=LAST;s.stop=t2<.5?legs.length:LAST;return s}
+    s.center=asia;s.zoom=.88;s.sideA=1;s.card=LAST;s.stop=LAST;return s;
   }
   function visible(c,center){return d3.geoDistance(c,center)<Math.PI/2-.08}
   function draw(p){
@@ -319,16 +322,16 @@ function setFlaps(el,text){
     if(y%2===0){var s=document.createElement("span");s.style.left=pct(y)+"%";s.textContent=y;yrs.appendChild(s)}
   }
   var D=[
-   {id:"srm",lane:"study",s:2014.5,e:2018.4,l:"SRM Institute",sm:"B.Tech IT, Delhi NCR",t:"B.Tech in Information Technology",org:"SRM Institute of Science and Technology",when:"Jul 2014 to May 2018",place:"Delhi NCR",blurb:"Four years of engineering fundamentals: how systems are built, tested and kept running.",ach:[["9.1","final CGPA"],["Distinction","graduated with"]],proj:["Core IT and software engineering curriculum","Campus into Infosys, 2018"]},
-   {id:"msc",lane:"study",s:2022.7,e:2023.7,l:"Leeds",sm:"MSc, 2:1",t:"MSc International Marketing Management",org:"University of Leeds",when:"Sep 2022 to Sep 2023",place:"Leeds",blurb:"Marketing strategy, consumer behaviour and research, with a year of working across cultures.",ach:[["2:1","MSc result"],["20%","more engagement from emotional appeals"]],proj:["Dissertation: NGO type, message appeal and scepticism","A 2 x 2 experiment, local vs global and emotional vs rational","Student Course Representative"],slug:"msc-leeds"},
-   {id:"se",lane:"work",s:2018.5,e:2020.0,l:"Systems Engineer",sm:"Infosys, 2018 to 2019",n:"1",t:"Systems Engineer",org:"Infosys",when:"2018 to 2019",place:"Pune",blurb:"First role in tech delivery, on data conversion and validation for a global logistics client.",ach:[["Led","internal dataset review team"],["Daily","hands-on data validation"]],proj:["Data conversion and validation, global logistics client","Support on a rail optimisation application"],slug:"infosys-systems-engineer"},
-   {id:"sse",up:1,lane:"work",s:2020.0,e:2022.0,l:"Senior Systems Engineer",sm:"Infosys, 2020 to 2021",n:"2",t:"Senior Systems Engineer",org:"Infosys",when:"2020 to 2021",place:"Pune",blurb:"Bigger scope: a loan-data migration for a global bank, plus platform enhancements and Agile delivery.",ach:[["Agile","ceremonies and sprint planning"],["Extra","vendor resources negotiated"]],proj:["Loan-data migration for a global bank","Platform enhancements","Peer-programming initiative for the team"],slug:"infosys-senior-systems-engineer"},
-   {id:"ac",lane:"work",s:2022.0,e:2022.65,l:"Associate Consultant",sm:"Infosys, 2022",n:"3",t:"Associate Consultant",org:"Infosys",when:"2022",place:"Pune",blurb:"Moved into consulting: client-facing reporting and change management on a large carve-out.",ach:[["40%","better reporting accuracy"],["50%","less manual reporting time"],["Insta","Infosys Insta Award"]],proj:["Lloyd's Register to LRQA carve-out","Migration dashboard for around 3,000 employees","Clients including Goldman Sachs, UBS and Bank of America"],slug:"infosys-associate-consultant"},
+   {id:"srm",lane:"study",s:2014,e:2018.4,l:"SRM Institute",sm:"B.Tech IT, Delhi NCR",t:"B.Tech in Information Technology",org:"SRM Institute of Science and Technology",when:"Jul 2014 to May 2018",place:"Delhi NCR",blurb:"Four years of engineering fundamentals: how systems are built, tested and kept running.",ach:[["9.1","CGPA"],["Distinction","Graduated with"]],proj:["Core IT and software engineering curriculum","Head of Hospitality, Delhi International Model United Nations (DIMUN) 2017","Head of Publicity, ISTE SRM Student Chapter, 2017 to 2018","Organising Committee, TEDx SRM 2016","Campus placement into Infosys, 2018"]},
+   {id:"msc",lane:"study",s:2022.7,e:2023.7,l:"Leeds",sm:"MSc, 2:1",t:"MSc International Marketing Management",org:"University of Leeds",when:"Sep 2022 to Sep 2023",place:"Leeds",blurb:"Marketing strategy, consumer behaviour and research, with a year of working across cultures.",ach:[["2:1","Final result"],["20%","Lift in engagement from emotional appeals"]],proj:["Dissertation: NGO type, message appeal and scepticism","A 2 x 2 experiment, local vs global and emotional vs rational","Student Course Representative"],slug:"msc-leeds"},
+   {id:"se",lane:"work",s:2018.5,e:2020.0,l:"Systems Engineer",sm:"Infosys, 2018 to 2019",n:"1",t:"Systems Engineer",org:"Infosys",when:"2018 to 2019",place:"Trivandrum",blurb:"First role in tech delivery: data conversion and validation for XPO Logistics.",ach:[["XPO Logistics","Client"],["Data conversion and validation","Scope"],["Rail optimisation platform","Supported in production"]],proj:["Data conversion and validation, global logistics client","Support on a rail optimisation application"],slug:"infosys-systems-engineer"},
+   {id:"sse",up:1,lane:"work",s:2020.0,e:2022.0,l:"Senior Systems Engineer",sm:"Infosys, 2020 to 2021",n:"2",t:"Senior Systems Engineer",org:"Infosys",when:"2020 to 2021",place:"Pune",blurb:"Bigger systems and more stakeholders: migration and platform work for Bank of America and UBS, across vendors and time zones.",ach:[["3,000+","Loan elements re-engineered in two months"],["30%","Higher on-time delivery across twelve sprints"],["8","Extra vendor resources won, 20% of budget"]],proj:["Loan-data migration for a global bank","Platform enhancements","Peer-programming initiative for the team"],slug:"infosys-senior-systems-engineer"},
+   {id:"ac",lane:"work",s:2022.0,e:2022.65,l:"Associate Consultant",sm:"Infosys, 2022",n:"3",t:"Associate Consultant",org:"Infosys",when:"2022",place:"Pune",blurb:"Moved into consulting: client-facing reporting and change management on a large carve-out.",ach:[["40%","Better reporting accuracy"],["50%","Less manual reporting time"],["Insta Award","Infosys recognition"]],proj:["Lloyd's Register to LRQA carve-out","Migration dashboard for around 3,000 employees","Clients including Goldman Sachs, UBS and Bank of America"],slug:"infosys-associate-consultant"},
    {id:"cx",lane:"work",s:2024.25,e:2025.0,l:"Customer Experience & Sales",sm:"Luminate, Apr to Dec 2024",n:"1",wine:1,t:"Customer Experience & Sales Specialist",org:"Luminate Education Group",when:"Apr to Dec 2024",place:"Leeds",blurb:"The front line of the student journey: enquiries, open days and conversion.",ach:[["770+","calls at 95% satisfaction"],["25%","higher event attendance"],["1,000+","students at conversion events"]],proj:["Open Days and Taster Days","CRM workflow and reporting clean-up (30% faster turnaround)"],slug:"luminate-customer-experience"},
    {id:"po",up:1,lane:"work",s:2025.0,e:2026.0,l:"Partnerships Officer",sm:"Luminate, 2025",n:"2",wine:1,t:"International Marketing & Partnerships Officer",org:"Luminate Education Group",when:"Jan to Dec 2025",place:"Leeds",blurb:"Opening markets: building agent and institutional partnerships across India, Vietnam and China.",ach:[["50+","partners built"],["10+","agents converted"],["50%","procurement backlog cut"],["25%","data accuracy gain"]],proj:["Market entry in India, Vietnam and China","ACG x Leeds Conservatoire Foundation Programme","ST Alphe UK 2025 delegation","Overseas delegations and events"],slug:"luminate-partnerships-officer"},
    {id:"rm",end:1,lane:"work",s:2026.0,e:NOW,l:"Recruitment Manager",sm:"Luminate, Jan 2026 to now",n:"3",wine:1,t:"Recruitment Manager, South Asia",org:"Luminate Education Group",when:"Jan 2026 to now",place:"Remote, Lucknow",blurb:"Owning the South Asia recruitment pipeline from strategy through to reporting.",ach:[["£1M+","pipeline"],["25%","quarter-on-quarter growth"],["3","markets"]],proj:["South Asia recruitment strategy","Power BI reporting for the region","ACG x Leeds Conservatoire partnership programme"],slug:"luminate-recruitment-manager"},
    {id:"rha",lane:"community",s:2021.6,e:2022.7,l:"Robin Hood Army",sm:"Co-Lead, Lucknow",olive:1,t:"Co-Lead, Lucknow",org:"Robin Hood Army",when:"Aug 2021 to Sep 2022",place:"Lucknow",blurb:"Led a volunteer chapter through food drives and a city-wide vaccination effort during COVID-19.",ach:[["2,000+","volunteers mobilised"],["44,000+","meals served"],["1,000","vaccinations"],["50+","community partners"]],proj:["Weekly food drives","Immunisation team and vaccine drives","Community partnerships"],slug:"robin-hood-army"},
-   {id:"h1",lane:"high",at:2018.4,y:"2018",t:"Graduated with Distinction",org:"SRM Institute",when:"May 2018",place:"Delhi NCR",blurb:"Finished the B.Tech with a 9.1 CGPA and went straight into Infosys.",ach:[["9.1","CGPA"],["Distinction","degree classification"]],proj:["Campus placement into Infosys"]},
+   {id:"h1",lane:"high",at:2018.4,y:"2018",t:"Graduated with Distinction",org:"SRM Institute",when:"May 2018",place:"Delhi NCR",blurb:"Finished the B.Tech with a 9.1 CGPA and went straight into Infosys.",ach:[["9.1","CGPA"],["Distinction","Degree classification"]],proj:["Campus placement into Infosys"]},
    {id:"h2",lane:"high",at:2022.35,y:"2022",t:"Infosys Insta Award",org:"Infosys",when:"2022",place:"Pune",blurb:"Recognised for client engagement and working across cultures on a large carve-out programme.",ach:[["Insta","Infosys award"],["40%","reporting accuracy gain"]],proj:["Lloyd's Register to LRQA carve-out"],slug:"infosys-associate-consultant"},
    {id:"h3",lane:"high",at:2023.7,y:"2023",t:"MSc with a 2:1",org:"University of Leeds",when:"Sep 2023",place:"Leeds",blurb:"Completed the MSc in International Marketing Management.",ach:[["2:1","MSc result"]],proj:["NGO messaging dissertation"],slug:"msc-leeds"},
    {id:"h4",lane:"high",at:2025.5,y:"2025",t:"ST Alphe UK 2025",org:"Luminate Education Group",when:"2025",place:"UK",blurb:"Represented the group as a delegate while building partnerships in new markets.",ach:[["50+","partners by year end"]],proj:["Overseas delegations and events"],slug:"luminate-partnerships-officer"},
@@ -345,7 +348,7 @@ function setFlaps(el,text){
       d.className="gbar"+(r.wine?" gbar--wine":r.olive?" gbar--olive":"");
       d.style.left=pct(r.s)+"%";d.style.width=(pct(r.e)-pct(r.s))+"%";
       d.style.transitionDelay=(i*.12)+"s";
-      d.innerHTML='<span class="gbar__l'+(r.up?" is-up":"")+(r.end?" is-end":"")+'"><b>'+r.t.replace("International Marketing & Partnerships Officer","Partnerships").replace("Customer Experience & Sales Specialist","Customer Exp.").replace("Recruitment Manager, South Asia","Recruitment").replace("MSc International Marketing Management","MSc, Leeds").replace("B.Tech in Information Technology","B.Tech, SRM").replace("Co-Lead, Lucknow","Robin Hood Army")+'</b><small>'+r.when.replace("Jul 2014 to May 2018","2014 to 2018").replace("Sep 2022 to Sep 2023","2022 to 2023").replace("Apr to Dec 2024","Apr to Dec 2024").replace("Jan to Dec 2025","2025").replace("Aug 2021 to Sep 2022","2021 to 2022")+'</small></span>';d.setAttribute("aria-label",r.t+", "+r.when);d.title=r.t+", "+r.when;
+      d.innerHTML='<span class="gbar__l'+(r.up?" is-up":"")+(r.end?" is-end":"")+'"><b>'+r.t.replace("International Marketing & Partnerships Officer","Partnerships").replace("Customer Experience & Sales Specialist","Customer Exp.").replace("Recruitment Manager, South Asia","Recruitment").replace("MSc International Marketing Management","MSc, Leeds").replace("B.Tech in Information Technology","B.Tech, SRM").replace("Co-Lead, Lucknow","Robin Hood Army")+'</b><small>'+r.when.replace("Jul 2014 to May 2018","Delhi NCR, 2014 to 2018").replace("Sep 2022 to Sep 2023","2022 to 2023").replace("Apr to Dec 2024","2024").replace("Jan to Dec 2025","2025").replace("Aug 2021 to Sep 2022","2021 to 2022").replace("Jan 2026 to now","2026 to now")+'</small></span>';d.setAttribute("aria-label",r.t+", "+r.when);d.title=r.t+", "+r.when;
     }
     tr.appendChild(d);nodes.push({el:d,r:r});
   });
@@ -355,7 +358,7 @@ function setFlaps(el,text){
     if(cur===id)return;cur=id;var r=byId[id];
     nodes.forEach(function(n){n.el.classList.toggle("is-sel",n.r.id===id)});
     var h='<div><p class="gp-when">'+r.when+" · "+r.place+'</p><h3>'+r.t+'</h3><p class="gp-org">'+r.org+'</p><p class="gp-blurb">'+r.blurb+'</p>'+(r.slug?'<button type="button" class="more" data-open="'+r.slug+'">Read the full story <span aria-hidden="true">→</span></button>':"")+'</div>';
-    h+='<div><h4>Achievements</h4><ul class="gp-ach">'+r.ach.map(function(a){return "<li><strong>"+a[0]+"</strong><span>"+a[1]+"</span></li>"}).join("")+'</ul></div>';
+    h+='<div><h4>Achievements</h4><ul class="gp-ach">'+r.ach.map(function(a){return "<li><span>"+a[1]+"</span><strong>"+a[0]+"</strong></li>"}).join("")+'</ul></div>';
     h+='<div><h4>Projects and highlights</h4><ul class="gp-proj">'+r.proj.map(function(p){return "<li>"+p+"</li>"}).join("")+'</ul></div>';
     panel.classList.remove("is-empty");panel.innerHTML=h;
     if(!RM&&hasG)gsap.fromTo(panel.children,{y:14,opacity:0},{y:0,opacity:1,duration:.5,stagger:.07,ease:"power3.out",overwrite:true});

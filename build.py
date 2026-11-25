@@ -40,6 +40,7 @@ def page_html(p):
                '<div class="h" role="columnheader"></div><div class="h" role="columnheader">Emotional appeal</div><div class="h" role="columnheader">Rational appeal</div>'
                '<div class="h" role="rowheader">Local NGO</div><div role="cell">Group A</div><div role="cell">Group B</div>'
                '<div class="h" role="rowheader">Global NGO</div><div role="cell">Group C</div><div role="cell">Group D</div></div></div>')
+    if p.get('clients'): o.append(f'<p class="page__clients"><span>Clients</span>{p["clients"]}</p>')
     o.append(f'<div class="page__cols"><h2>What I did</h2><div>{body}</div></div>')
     if p['gallery']:
         o.append('<div class="page__gallery">'+''.join(f'<figure class="{c}"><img data-img="{k}" alt="{ALT[k]}" loading="lazy"><figcaption>{cap}</figcaption></figure>' for k,c,cap in p['gallery'])+'</div>')
