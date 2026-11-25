@@ -798,7 +798,7 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
   }
 
   // the fold runs over the first stretch, then it holds, then the page hands over
-  var FOLD_END=0.68,HOLD_END=0.84;
+  var FOLD_END=0.62,HOLD_END=0.76;
   var LINES=["One square of paper, nothing folded yet.",
              "The first creases go in.",
              "The corners lift and it takes shape.",
