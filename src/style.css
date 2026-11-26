@@ -98,7 +98,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 .hdr.is-solid .hdr__progress{opacity:1}
 
 /* hero: cinematic tilt */
-.hero{position:relative;height:300vh;background:#9DBCDD}
+.hero{position:relative;height:240vh;background:#9DBCDD}
 .hero__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
 .hero__img{position:absolute;left:0;top:0;width:100%;max-width:none;height:auto;will-change:transform;transform-origin:50% 0}
 .hero__shade{display:none}
@@ -155,7 +155,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 .lift__panel span{color:var(--on-wine-soft);font-size:.92rem}
 
 /* journey */
-.journey{position:relative;height:900vh;background:var(--paper)}
+.journey{position:relative;height:660vh;background:var(--paper)}
 .journey__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
 .journey__canvas{position:absolute;inset:0;width:100%;height:100%}
 .journey__panel{position:absolute;left:var(--gutter);top:50%;transform:translateY(-50%);z-index:2;width:min(500px,40vw)}
@@ -277,21 +277,22 @@ p{margin:0 0 1.1em;max-width:64ch}
 .org__intro{display:grid;grid-template-columns:1fr 1fr;gap:var(--gutter);margin-bottom:clamp(44px,5vw,70px)}
 .roles{list-style:none;margin:0 0 clamp(50px,6vw,84px);padding:0;position:relative}
 .roles::before{content:"";position:absolute;left:11px;top:14px;bottom:14px;width:1px;background:var(--rule-strong)}
-.rolei{position:relative;display:grid;grid-template-columns:1fr 1.5fr;gap:var(--gutter);padding:0 0 clamp(34px,3.4vw,50px) 52px}
+.rolei{position:relative;display:grid;grid-template-columns:1fr 1.5fr;gap:var(--gutter);padding:0 0 clamp(26px,2.6vw,38px) 52px}
 .rolei::before{content:"";position:absolute;left:4px;top:12px;width:15px;height:15px;border-radius:50%;background:var(--ivory);border:1px solid var(--wine)}
 .rolei.is-now::before{background:var(--wine);box-shadow:0 0 0 6px rgba(92,18,48,.12)}
 .rolei__when{font-size:.86rem;font-weight:700;color:var(--wine);margin-bottom:10px}
 .rolei h4{font-size:clamp(1.6rem,2.4vw,2.2rem);font-weight:400;margin-bottom:10px}
 .rolei__where{color:var(--ink-faint);font-size:.93rem;margin:0}
-.rolei ul{margin:0 0 20px;padding:0;list-style:none}
-.rolei ul li{padding:10px 0 10px 26px;border-top:1px solid var(--rule);position:relative;color:var(--ink-soft);font-size:.98rem}
-.rolei ul li::before{content:"";position:absolute;left:2px;top:1.35em;width:12px;height:1px;background:var(--wine)}
-.rolei ul li:last-child{border-bottom:1px solid var(--rule)}
+.rolei__sum{margin:0 0 14px;color:var(--ink-soft);font-size:.98rem;line-height:1.5;max-width:56ch}
+.rolei__keys{list-style:none;display:flex;flex-wrap:wrap;gap:4px 20px;margin:0 0 16px;padding:0}
+.rolei__keys li{display:flex;align-items:baseline;gap:7px;padding:0;border:0}
+.rolei__keys b{font-family:var(--display);font-weight:400;font-size:1.12rem;line-height:1.2;color:var(--wine)}
+.rolei__keys span{font-size:.82rem;color:var(--ink-faint)}
 .built{display:grid;grid-template-columns:repeat(3,1fr);gap:0;list-style:none;margin:0 0 clamp(70px,8vw,120px);padding:0;border-top:1px solid var(--rule)}
-.built li{padding:34px 30px 34px 0;border-bottom:1px solid var(--rule)}
+.built li{padding:22px 26px 22px 0;border-bottom:1px solid var(--rule)}
 .built li:not(:nth-child(3n+1)){padding-left:30px;border-left:1px solid var(--rule)}
-.built h5{font-family:var(--display);font-weight:420;font-size:1.45rem;margin:0 0 8px}
-.built p{margin:0;color:var(--ink-soft);font-size:.95rem}
+.built h5{font-family:var(--display);font-weight:420;font-size:1.2rem;margin:0 0 5px}
+.built p{margin:0;color:var(--ink-soft);font-size:.88rem;line-height:1.45}
 .sub-h{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:30px}
 .reel__btns{display:flex;gap:10px}
 .reel__btns button{width:52px;height:52px;border:1px solid var(--rule-strong);display:grid;place-items:center;color:var(--wine);transition:background .3s,color .3s}
@@ -471,7 +472,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 .page__bar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:calc(16px + env(safe-area-inset-top,0px)) var(--gutter) 16px;background:rgba(251,248,242,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
 .page__back{display:inline-flex;align-items:center;gap:10px;font-weight:700;color:var(--wine)}
 .page__crumb{font-size:.86rem;color:var(--ink-faint)}
-.page__hero{background:var(--paper);padding:clamp(80px,10vw,140px) 0 clamp(60px,7vw,90px)}
+.page__hero{background:var(--wine);color:var(--on-wine);padding:clamp(80px,10vw,140px) 0 clamp(60px,7vw,90px)}
 .page__hero .wrap{display:grid;grid-template-columns:1.4fr 1fr;gap:var(--gutter);align-items:end}
 .page__hero h1{font-size:clamp(2.8rem,6vw,5.6rem);font-weight:330;line-height:1;letter-spacing:-.025em}
 .page__meta{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule-strong)}
@@ -715,7 +716,9 @@ a.page__back{text-decoration:none}
 /* ---------- v4: icons ---------- */
 .ico{flex:none;display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;border:1px solid rgba(156,114,54,.55);color:var(--wine);background:rgba(251,248,242,.6);transition:color .4s,border-color .4s,background .4s,transform .5s var(--ease)}
 .ico svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.pillars .ico,.built .ico,.skillcards .ico,.pcard .ico{margin-bottom:18px}
+.pillars .ico,.skillcards .ico,.pcard .ico{margin-bottom:18px}
+.built .ico{margin-bottom:10px;width:34px;height:34px}
+.built .ico svg{width:17px;height:17px}
 .pillars li:hover .ico,.built li:hover .ico,.pcard:hover .ico{transform:rotate(-8deg) scale(1.06);border-color:var(--brass)}
 .skillcards li:hover .ico{color:var(--brass-light);border-color:var(--brass-light);background:transparent}
 .scard__in{position:relative}
@@ -818,7 +821,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 .fold .olink:hover,.contact .olink:hover,.foot .olink:hover{color:var(--on-wine);text-decoration-color:var(--on-wine)}
 
 /* --- the fold: the page folds itself into a swan, then hands over --- */
-.fold{position:relative;height:300vh;background:var(--wine-deep)}
+.fold{position:relative;height:265vh;background:var(--wine-deep)}
 .fold__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
   background:var(--wine-deep);color:var(--on-wine);text-align:center}
 .fold__stage::after{content:"";position:absolute;inset:0;pointer-events:none;
@@ -961,12 +964,12 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 
 /* --- less scrolling on small screens: the pinned scenes need fewer screens --- */
 @media (max-width:980px){
-  .hero{height:230vh}
-  .journey{height:640vh}
+  .hero{height:200vh}
+  .journey{height:500vh}
 }
 @media (max-width:760px){
   .hero{height:190vh}
-  .journey{height:480vh}
+  .journey{height:400vh}
   .built,.proofs{grid-template-columns:1fr 1fr}
   .built li{padding:20px 14px 20px 0}
   .built h5{font-size:1rem}
@@ -1072,5 +1075,30 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 
 /* the experience heading is broken on purpose, so give it its own measure */
 #experience .sec-head{align-items:end}
+#experience .sec-head .eyebrow{margin-bottom:clamp(30px,4vw,58px)}
 #experience .sec-head h2{line-height:.98;letter-spacing:-.022em}
 @media (max-width:760px){#experience .sec-head h2 br{display:none}}
+
+/* the detail page opens on wine, so the header type sits on it */
+.page__hero h1{color:var(--on-wine)}
+.page__hero .eyebrow{color:var(--brass-light)}
+.page__hero .eyebrow::before{background:currentColor}
+.page__meta{border-top:1px solid rgba(247,239,227,.4)}
+.page__meta li{border-bottom:1px solid rgba(247,239,227,.18);color:var(--on-wine)}
+.page__meta li span:first-child{color:rgba(247,239,227,.62)}
+
+/* phones carry the most scroll, so the repeated card blocks run tighter there */
+@media (max-width:760px){
+  .built li{padding:16px 16px 16px 0}
+  .built h5{font-size:1.05rem}
+  .built p{font-size:.82rem}
+  .pcard{padding:24px 20px;min-height:0}
+  .pcard p{font-size:.9rem}
+  .side-projects{gap:14px}
+  .org__intro{gap:10px}
+  .rolei__sum{font-size:.94rem;margin-bottom:11px}
+  .rolei__keys{gap:3px 16px;margin-bottom:13px}
+  .rolei__keys b{font-size:1.05rem}
+  .cast__item{padding:9px 0}
+  .stats4{margin:22px 0 26px}
+}
