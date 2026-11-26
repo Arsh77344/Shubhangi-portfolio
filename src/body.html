@@ -485,6 +485,48 @@
   </div>
 </section>
 
+<!-- BUCKET LIST: the paper tears open onto Barcelona as you scroll -->
+<section class="spain" id="spain" aria-labelledby="spainH">
+  <div class="spain__stage">
+    <div class="spain__inner">
+      <svg class="spain__svg" id="spainSvg" viewBox="0 0 820 900"
+           preserveAspectRatio="xMidYMin slice" role="img" aria-labelledby="spainSvgT">
+        <title id="spainSvgT">The Sagrada Família torn from paper, with a figure standing before it</title>
+        <defs>
+          <linearGradient id="spainReveal" gradientUnits="objectBoundingBox" x1="1" y1="1" x2="0" y2="0">
+            <stop id="spainStopA" offset="0" stop-color="#fff"/>
+            <stop id="spainStopB" offset="0.004" stop-color="#000"/>
+          </linearGradient>
+          <filter id="spainRough" x="-25%" y="-25%" width="150%" height="150%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.011 0.017" numOctaves="4" seed="5" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="86" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <filter id="spainSoft" x="-60%" y="-180%" width="220%" height="460%">
+            <feGaussianBlur stdDeviation="5"/>
+          </filter>
+          <mask id="spainMask">
+            <rect x="-80" y="-80" width="980" height="1060" fill="url(#spainReveal)" filter="url(#spainRough)"/>
+          </mask>
+        </defs>
+        <g id="spainArtG" mask="url(#spainMask)">
+          <image id="spainArt" href="{{IMG:spain_art}}" x="0" y="0" width="560" height="645"/>
+          <g id="spainDust"></g>
+        </g>
+        <ellipse id="spainShadow" cx="704" cy="791" rx="62" ry="5.5" fill="#2A1C1F" opacity="0" filter="url(#spainSoft)"/>
+        <g id="spainFigure" opacity="0">
+          <ellipse cx="660" cy="712" rx="7.2" ry="8.6" fill="#5C1230"/>
+          <path d="M653,724 C650.5,730 649,741 648,755 L647,792 L673,792 L672,755 C671,741 669.5,730 667,724 C663.8,721 656.2,721 653,724 Z" fill="#5C1230"/>
+        </g>
+      </svg>
+      <div class="spain__copy" id="spainCopy">
+        <p class="eyebrow">Still on the list</p>
+        <h2 class="h-l" id="spainH">Barcelona.</h2>
+        <p class="spain__note">The Sagrada Família, and the long way round to it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- HOW I WORK -->
 <section class="sec" id="how" aria-labelledby="howH">
   <div class="wrap">

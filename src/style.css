@@ -1102,3 +1102,22 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .cast__item{padding:9px 0}
   .stats4{margin:22px 0 26px}
 }
+
+/* --- bucket list: the paper tears open onto Barcelona --- */
+.spain{position:relative;height:200vh;background:var(--paper)}
+.spain__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
+  display:grid;place-items:center;padding:clamp(16px,3vh,40px) var(--gutter)}
+.spain__inner{position:relative;width:min(92vw,760px);margin:0 auto}
+.spain__svg{display:block;width:100%;height:auto;aspect-ratio:820/900;max-height:84vh}
+.spain__copy{position:absolute;left:0;bottom:1%;width:min(54%,360px)}
+.spain__copy .eyebrow{margin-bottom:14px}
+.spain h2{margin:0 0 12px;line-height:1}
+.spain__note{margin:0;color:var(--ink-soft);font-size:.95rem;max-width:30ch}
+@media (max-width:860px){
+  .spain{height:175vh}
+  .spain__inner{width:96vw;display:flex;flex-direction:column;gap:18px}
+  .spain__svg{aspect-ratio:820/740;max-height:58vh}
+  .spain__copy{position:static;width:auto;padding:0 var(--gutter)}
+  .spain__note{font-size:.9rem}
+}
+@media (prefers-reduced-motion:reduce){.spain{height:auto}.spain__stage{position:relative;height:auto;padding:var(--sec) var(--gutter)}}
