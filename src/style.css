@@ -70,16 +70,30 @@ p{margin:0 0 1.1em;max-width:64ch}
 .more:hover{border-color:var(--wine);gap:16px}
 
 /* loader */
-.loader{position:fixed;inset:0;z-index:700;display:grid;place-items:center;cursor:pointer;overflow:hidden}
-.loader__door{position:absolute;top:0;bottom:0;width:50.5%;background:var(--ivory)}
-.loader__door--l{left:0;border-right:1px solid var(--brass-light)}
-.loader__door--r{right:0;border-left:1px solid var(--brass-light)}
-.loader__core{position:relative;z-index:2;text-align:center}
-.loader__mark{font-family:var(--display);font-style:italic;font-weight:300;font-size:clamp(4.4rem,9vw,7.6rem);color:var(--wine);line-height:1}
-.loader__bar{width:180px;height:1px;background:var(--rule);margin:26px auto 12px;position:relative;overflow:hidden}
-.loader__bar i{position:absolute;inset:0;background:var(--wine);transform-origin:left;transform:scaleX(0)}
-.loader__count{font-size:.85rem;font-weight:600;color:var(--ink-soft);font-variant-numeric:tabular-nums}
-.loader__hint{position:absolute;bottom:30px;left:0;right:0;text-align:center;font-size:.82rem;color:var(--ink-faint);z-index:2}
+/* The opening is the one moment the whole screen can be hers, so it is
+   given over to the wine. The bar tracks what has actually loaded, not a
+   stopwatch, and the places are the ones the journey section travels. */
+.loader{position:fixed;inset:0;z-index:700;display:grid;place-items:center;cursor:pointer;
+  overflow:hidden;background:var(--wine-deep)}
+.loader__door{position:absolute;top:0;bottom:0;width:50.5%;background:var(--wine-deep)}
+.loader__door--l{left:0;border-right:1px solid rgba(214,179,124,.16)}
+.loader__door--r{right:0;border-left:1px solid rgba(214,179,124,.16)}
+.loader__core{position:relative;z-index:2;text-align:center;padding:0 24px}
+.loader__mark{font-family:var(--display);font-style:italic;font-weight:300;
+  font-size:clamp(4.4rem,9vw,7.6rem);color:var(--on-wine);line-height:1;
+  display:flex;justify-content:center;overflow:hidden}
+.loader__mark span{display:block}
+.loader__sub{margin:10px 0 0;font-size:.74rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--brass-light);opacity:.85}
+.loader__bar{width:min(240px,62vw);height:1px;background:rgba(214,179,124,.28);
+  margin:30px auto 12px;position:relative;overflow:hidden}
+.loader__bar i{position:absolute;inset:0;background:var(--brass-light);transform-origin:left;transform:scaleX(0)}
+.loader__row{display:flex;justify-content:space-between;align-items:baseline;
+  width:min(240px,62vw);margin:0 auto;font-size:.76rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--on-wine-soft)}
+.loader__count{font-weight:700;font-variant-numeric:tabular-nums;color:var(--brass-light)}
+.loader__hint{position:absolute;bottom:30px;left:0;right:0;text-align:center;font-size:.74rem;
+  letter-spacing:.18em;text-transform:uppercase;color:rgba(247,239,227,.42);z-index:2}
 .loader.is-done{pointer-events:none}
 
 /* header */
@@ -136,10 +150,22 @@ p{margin:0 0 1.1em;max-width:64ch}
 .pillars p{color:var(--ink-soft);margin:0;font-size:.98rem}
 
 /* curved text */
-.curve{position:relative;height:220px;overflow:hidden;margin:-20px 0}
-.curve svg{position:absolute;left:-5%;width:110%;height:100%}
-.curve text{font-family:var(--display);font-style:italic;font-weight:300;font-size:46px;fill:var(--wine)}
-.curve path.line{fill:none;stroke:var(--rule);stroke-width:1}
+/* The band stretched its viewBox to the width of the screen, so on a phone
+   every letter was squeezed to a quarter of its width and the line was
+   unreadable. It now scales evenly and crops instead, and the box gets
+   shorter as the screen narrows so the type stays a sensible size. */
+/* It is wine now, and it runs straight into the wine of the numbers below,
+   so the tagline and the figures read as one dark passage instead of two
+   pale sections with a rule between them. */
+.curve{position:relative;height:238px;overflow:hidden;margin:0;background:var(--wine)}
+.curve::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;z-index:2;
+  background:linear-gradient(90deg,transparent,rgba(214,179,124,.45),transparent)}
+.curve svg{position:absolute;left:0;top:0;width:100%;height:100%}
+.curve text{font-family:var(--display);font-style:italic;font-weight:300;font-size:46px;fill:var(--on-wine)}
+@media (max-width:980px){.curve{height:168px}}
+@media (max-width:600px){.curve{height:138px}}
+@media (max-width:420px){.curve{height:118px}}
+.curve path.line{fill:none;stroke:rgba(214,179,124,.3);stroke-width:1}
 
 /* lift numbers */
 .lift{background:var(--wine);color:var(--on-wine);padding:clamp(80px,10vw,140px) 0;position:relative;overflow:hidden}
@@ -155,7 +181,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 .lift__panel span{color:var(--on-wine-soft);font-size:.92rem}
 
 /* journey */
-.journey{position:relative;height:660vh;background:var(--paper)}
+.journey{position:relative;height:540vh;background:var(--paper)}
 .journey__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
 .journey__canvas{position:absolute;inset:0;width:100%;height:100%}
 .journey__panel{position:absolute;left:var(--gutter);top:50%;transform:translateY(-50%);z-index:2;width:min(500px,40vw)}
@@ -232,7 +258,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 .gp-proj li{padding:9px 0 9px 24px;border-bottom:1px solid var(--rule);position:relative;font-size:.92rem;color:var(--ink-soft)}
 .gp-proj li::before{content:"";position:absolute;left:2px;top:1.35em;width:12px;height:1px;background:var(--wine)}
 /* numbers: floating cards */
-.stats{background:var(--wine);padding:var(--sec) 0;color:var(--on-wine)}
+.stats{background:var(--wine);padding:clamp(40px,5vw,72px) 0 var(--sec);color:var(--on-wine)}
 .stats__h{font-size:clamp(2.4rem,4.6vw,4.4rem);font-weight:330;letter-spacing:-.02em;line-height:1.02;margin-bottom:clamp(40px,5vw,70px);color:var(--on-wine)}
 .stats__h em{color:var(--brass-light);font-weight:300}
 .stats__field{position:relative;height:clamp(700px,54vw,800px)}
@@ -330,8 +356,8 @@ p{margin:0 0 1.1em;max-width:64ch}
 .sphere{position:relative;aspect-ratio:1;width:100%;max-width:580px;margin-left:auto;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .sphere:active{cursor:grabbing}
 .sphere__ring{position:absolute;inset:7%;border-radius:50%;border:1px dashed var(--rule-strong);pointer-events:none}
-.sphere__tag{position:absolute;left:50%;top:50%;white-space:nowrap;will-change:transform,opacity;color:var(--ink);font-size:.95rem;font-weight:600}
-.sphere__tag.is-main{font-family:var(--display);font-weight:420;font-size:1.65rem;color:var(--wine)}
+.sphere__tag{position:absolute;left:50%;top:50%;white-space:nowrap;will-change:transform,opacity;color:var(--ink);font-size:clamp(.6rem,2.3vw,.95rem);font-weight:600}
+.sphere__tag.is-main{font-family:var(--display);font-weight:420;font-size:clamp(.98rem,3.9vw,1.65rem);color:var(--wine)}
 .sphere__hint{text-align:right;font-size:.82rem;color:var(--ink-faint);margin-top:6px}
 .skillcards{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);list-style:none;margin:0 0 clamp(70px,8vw,110px);padding:0}
 .skillcards li{background:var(--ivory);padding:30px 26px;min-height:250px;display:flex;flex-direction:column;transition:background .4s,color .4s}
@@ -817,43 +843,15 @@ a.page__back{text-decoration:none}
 .olink:hover .ext,.olink:focus-visible .ext{opacity:1}
 h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 .eyebrow .olink{text-decoration-color:rgba(156,114,54,.55)}
-.fold .olink,.contact .olink,.foot .olink{color:var(--on-wine);text-decoration-color:rgba(214,179,124,.6)}
-.fold .olink:hover,.contact .olink:hover,.foot .olink:hover{color:var(--on-wine);text-decoration-color:var(--on-wine)}
+.contact .olink,.foot .olink{color:var(--on-wine);text-decoration-color:rgba(214,179,124,.6)}
+.contact .olink:hover,.foot .olink:hover{color:var(--on-wine);text-decoration-color:var(--on-wine)}
 
 /* --- the fold: the page folds itself into a swan, then hands over --- */
-.fold{position:relative;height:265vh;background:var(--wine-deep)}
-.fold__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
-  background:var(--wine-deep);color:var(--on-wine);text-align:center}
-.fold__stage::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(60% 52% at 50% 54%,rgba(214,179,124,.2),transparent 74%)}
 /* the bird takes the screen; everything else sits over it */
-.fold__svg{position:absolute;left:50%;top:55%;transform:translate(-50%,-50%);
-  width:min(97vw,1180px);max-height:84vh;height:auto;overflow:visible;
-  filter:drop-shadow(0 34px 42px rgba(0,0,0,.45))}
 .fct{stroke:rgba(58,10,28,.32);stroke-width:.4;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 .f0{fill:#E8DAC0}.f1{fill:#C9B596}.f2{fill:#BCA586}.f3{fill:#CDBA9A}.f4{fill:#DCCBAE}
 .f5{fill:#F6ECDC}.f6{fill:#F2E7D5}.f7{fill:#F7EEE0}.f8{fill:#FAF4EA}.f9{fill:#E6D8BE}
-.fold__shadow{fill:#16040c;opacity:.1}
-.fold__copy{position:absolute;z-index:2;left:50%;transform:translateX(-50%);
-  top:clamp(16px,4.4vh,54px);width:min(92vw,44ch)}
-.fold__eyebrow{color:var(--brass-light);justify-content:center;margin-bottom:14px}
-.fold__eyebrow::before{background:currentColor}
-.fold h2{color:var(--on-wine);margin:0;font-size:clamp(1.3rem,2.2vw,2.05rem);line-height:1.2}
-.fold__cap{position:absolute;z-index:2;left:50%;transform:translateX(-50%);
-  bottom:clamp(50px,8vh,86px);width:min(92vw,34ch);margin:0;
-  font-family:var(--display);font-size:clamp(1.05rem,1.55vw,1.45rem);line-height:1.4;
-  color:var(--brass-light);min-height:2.2em}
-.fold__cap span{display:inline-block;transition:opacity .45s var(--ease),transform .45s var(--ease)}
-.fold__cap.is-out span{opacity:0;transform:translateY(-8px)}
-.fold__hint{position:absolute;z-index:2;left:50%;transform:translateX(-50%);
-  bottom:clamp(18px,3vh,32px);margin:0;font-size:.7rem;font-weight:700;letter-spacing:.18em;
-  text-transform:uppercase;color:rgba(247,239,227,.4);transition:opacity .5s}
-.fold__hint.is-done{opacity:0}
-.reduced .fold__hint{display:none}
 /* the next chapter slides up over the finished swan, like a fresh sheet of paper */
-.fold__wipe{position:absolute;left:-6%;right:-6%;bottom:0;height:116%;z-index:3;
-  background:var(--paper);transform:translate3d(0,100%,0);will-change:transform;
-  clip-path:polygon(0 5.5%,24% 1.6%,53% 4.4%,78% .8%,100% 5%,100% 100%,0 100%)}
 
 /* --- the mobile menu --- */
 .hdr__burger{display:none;position:relative;width:46px;height:46px;flex:none;align-items:center;justify-content:center;gap:5px;flex-direction:column}
@@ -905,8 +903,6 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .arcd__open{width:100%;justify-content:center}
   .hdr__burger{display:flex}
   .hdr .hdr__nav a:not(.hdr__cta){display:none}
-  .fold{height:280vh}
-  .fold__svg{width:98vw;max-height:72vh;top:56%}
 }
 
 /* phones */
@@ -924,9 +920,6 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .arci{min-height:56px;padding:13px 8px 13px 11px;gap:1px 12px}
   .arci__t{font-size:1rem}
   .arcr.is-sel>.arci{padding-left:16px}
-  .fold{height:230vh}
-  .fold__svg{width:100vw;max-height:64vh;top:54%}
-  .fold__cap{font-size:1rem;min-height:3.2em;bottom:clamp(44px,7vh,70px)}
   .stats4{gap:20px 16px}
   .ways li{padding:22px 0}
   .ways h3{gap:14px;font-size:1.3rem}
@@ -953,23 +946,22 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 @media (pointer:coarse){
   .more,.btn,.arci,.arcd__open,.hdr__nav a,.foot__nav a,.cast__item,.rm-btn{min-height:44px}
   .reel__btns button{width:44px;height:44px}
-  .sphere{touch-action:none}
+  .sphere{touch-action:pan-y}
 }
-.sphere{touch-action:none}
 
 @media (prefers-reduced-motion:reduce){
-  .arci,.arci::before,.arcd,.fold__cap span,.mnav{transition:none}
+  .arci,.arci::before,.arcd,.mnav{transition:none}
   .arcv__sheet img{animation:none}
 }
 
 /* --- less scrolling on small screens: the pinned scenes need fewer screens --- */
 @media (max-width:980px){
-  .hero{height:200vh}
-  .journey{height:500vh}
+  .hero{height:175vh}
+  .journey{height:430vh}
 }
 @media (max-width:760px){
-  .hero{height:190vh}
-  .journey{height:400vh}
+  .hero{height:165vh}
+  .journey{height:355vh}
   .built,.proofs{grid-template-columns:1fr 1fr}
   .built li{padding:20px 14px 20px 0}
   .built h5{font-size:1rem}
@@ -1104,7 +1096,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 }
 
 /* --- bucket list: the paper tears open onto Barcelona --- */
-.spain{position:relative;height:215vh;background:var(--paper)}
+.spain{position:relative;height:240vh;background:var(--paper)}
 .spain__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
   display:grid;place-items:center;padding:var(--gutter) 0}
 .spain__inner{width:min(94vw,1160px);margin:0 auto;display:grid;
@@ -1123,7 +1115,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 .spain__kick span{flex:0 0 34px;height:1px;background:var(--brass);opacity:.6}
 @media (max-width:1180px){.spain__art{max-width:540px}}
 @media (max-width:980px){
-  .spain{height:185vh}
+  .spain{height:235vh}
   .spain__stage{padding:calc(var(--gutter) * .5) 0}
   .spain__inner{width:min(94vw,560px);grid-template-columns:1fr;gap:clamp(14px,3vw,26px);
     justify-items:start}
@@ -1134,7 +1126,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .spain__kick{margin-top:18px}
 }
 @media (max-width:600px){
-  .spain{height:175vh}
+  .spain{height:225vh}
   .spain__svg{max-height:46vh;max-height:46dvh}
   .spain__note{font-size:.9rem}
   .spain__kick{font-size:.66rem;letter-spacing:.13em;margin-top:14px}

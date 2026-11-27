@@ -2,15 +2,19 @@
 <div class="grain" aria-hidden="true"></div>
 <div class="cursor" id="cursor" aria-hidden="true"><span id="cursorTxt">View</span></div>
 
-<div class="loader" id="loader" aria-hidden="true">
+<div class="loader" id="loader" role="status" aria-label="Loading">
   <div class="loader__door loader__door--l"></div>
   <div class="loader__door loader__door--r"></div>
-  <div class="loader__core">
-    <div class="loader__mark">SG</div>
+  <div class="loader__core" aria-hidden="true">
+    <div class="loader__mark"><span>S</span><span>G</span></div>
+    <p class="loader__sub">Shubhangi Gupta</p>
     <div class="loader__bar"><i id="loaderBar"></i></div>
-    <div class="loader__count" id="loaderCount">0</div>
+    <div class="loader__row">
+      <span class="loader__place" id="loaderPlace">Lucknow</span>
+      <span class="loader__count" id="loaderCount">0</span>
+    </div>
   </div>
-  <p class="loader__hint">Click to skip</p>
+  <p class="loader__hint">Skip</p>
 </div>
 
 <header class="hdr" id="hdr">
@@ -88,7 +92,7 @@
         </div>
       </div>
       <figure class="about__photo">
-        <div class="reveal" data-reveal><img data-img="stall" alt="Shubhangi speaking with prospective students at a Leeds Conservatoire exhibition stand" width="1200" height="1050"></div>
+        <div class="reveal" data-reveal><img data-img="stall" loading="lazy" decoding="async" alt="Shubhangi speaking with prospective students at a Leeds Conservatoire exhibition stand" width="1200" height="1050"></div>
         <figcaption>Exhibiting for Leeds Conservatoire</figcaption>
         <div class="about__stamp" aria-hidden="true">
           <svg viewBox="0 0 132 132"><defs><path id="stampPath" d="M66,66 m-50,0 a50,50 0 1,1 100,0 a50,50 0 1,1 -100,0"/></defs><text font-family="Manrope,sans-serif" font-size="10.5" font-weight="700" letter-spacing="2.4" fill="#5C1230"><textPath href="#stampPath">LUCKNOW · DELHI · PUNE · LEEDS · </textPath></text></svg>
@@ -105,9 +109,10 @@
 </section>
 
 <!-- CURVED TEXT -->
-<div class="curve" aria-hidden="true">
-  <svg viewBox="0 0 1600 220" preserveAspectRatio="none">
-    <path id="curvePath" class="line" d="M0,150 C300,30 500,30 800,110 S1300,200 1600,70"/>
+<div class="curve">
+  <svg viewBox="0 0 1600 220" preserveAspectRatio="xMinYMid slice" role="img"
+       aria-label="Many worlds, one person. Multi-existing across industries, countries and time zones">
+    <path id="curvePath" class="line" d="M0,140 C300,60 520,58 820,112 S1320,172 1600,86"/>
     <text><textPath href="#curvePath" id="curveText" startOffset="0">Many worlds, one person. Multi-existing across industries, countries and time zones   ·   Many worlds, one person. Multi-existing across industries, countries and time zones   ·   </textPath></text>
   </svg>
 </div>
@@ -378,32 +383,52 @@
 </section>
 
 
-<!-- ORIGAMI: the page folds itself into a swan, then hands over to the next chapter -->
-<section class="fold" id="fold" aria-labelledby="foldH">
-  <div class="fold__stage">
-    <div class="fold__copy">
-      <p class="eyebrow fold__eyebrow">Between chapters</p>
-      <h2 class="h-l" id="foldH">A flat sheet, folded<br>into something that flies.</h2>
+<!-- BUCKET LIST: the paper tears open onto Barcelona as you scroll -->
+<section class="spain" id="spain" aria-labelledby="spainH">
+  <div class="spain__stage">
+    <div class="spain__inner">
+      <figure class="spain__art">
+        <svg class="spain__svg" id="spainSvg" viewBox="0 0 860 1154"
+             preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="spainSvgT">
+          <title id="spainSvgT">An illustration of the Sagrada Familia at night, a trail of trees spilling down from it to a small figure standing alone at the lower right</title>
+          <defs>
+            <linearGradient id="spainReveal" gradientUnits="objectBoundingBox"
+                            x1="0.797" y1="0.905" x2="0.288" y2="0.027">
+              <stop id="spainStopA" offset="0" stop-color="#fff"/>
+              <stop id="spainStopM" offset="0.0003" stop-color="#D2D2D2"/>
+              <stop id="spainStopB" offset="0.0006" stop-color="#000"/>
+            </linearGradient>
+            <filter id="spainRough" x="-30%" y="-30%" width="160%" height="160%"
+                    color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="0.0082 0.0125" numOctaves="4" seed="11" result="n"/>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="108" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+            <radialGradient id="spainGlow">
+              <stop offset="0" stop-color="#D6B37C" stop-opacity="0.5"/>
+              <stop offset="0.45" stop-color="#B08840" stop-opacity="0.17"/>
+              <stop offset="1" stop-color="#9C7236" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="spainTwinkle" x="-70%" y="-70%" width="240%" height="240%">
+              <feGaussianBlur stdDeviation="1.1"/>
+            </filter>
+            <mask id="spainMask">
+              <rect x="-160" y="-160" width="1180" height="1480" fill="url(#spainReveal)" filter="url(#spainRough)"/>
+            </mask>
+          </defs>
+          <g id="spainArtG" mask="url(#spainMask)">
+            <ellipse id="spainHalo" cx="408" cy="352" rx="396" ry="336" fill="url(#spainGlow)" opacity="0"/>
+            <image id="spainArt" data-href="{{IMG:spain_art}}" x="0" y="0" width="860" height="1154"/>
+            <g id="spainGlints" fill="#FBEDCB" filter="url(#spainTwinkle)"></g>
+          </g>
+        </svg>
+      </figure>
+      <div class="spain__copy" id="spainCopy">
+        <p class="eyebrow">The next adventure</p>
+        <h2 class="h-l" id="spainH">I want to see all of it.</h2>
+        <p class="spain__note">New places are the part I never tire of &mdash; the streets, the food, the way people do ordinary things differently. I travel every chance I get, and the list only ever grows.</p>
+        <p class="spain__kick"><span></span>Next up &middot; Barcelona, Spain</p>
+      </div>
     </div>
-    <svg class="fold__svg" id="foldSvg" viewBox="48 2 304 300" role="img" aria-labelledby="foldSvgT">
-      <title id="foldSvgT">A square of paper folding into an origami swan</title>
-      <ellipse class="fold__shadow" id="foldShadow" cx="200" cy="312" rx="130" ry="11"/>
-      <g id="foldG">
-        <polygon class="fct f0" points="214,148 306,88 338,96 290,180"/>
-        <polygon class="fct f1" points="290,180 296,236 200,272"/>
-        <polygon class="fct f2" points="296,236 238,276 200,272"/>
-        <polygon class="fct f3" points="146,192 142,244 200,272"/>
-        <polygon class="fct f4" points="214,148 290,180 200,272"/>
-        <polygon class="fct f5" points="214,148 200,272 146,192"/>
-        <polygon class="fct f6" points="214,148 208,98 172,112 146,192"/>
-        <polygon class="fct f7" points="208,98 188,52 152,62 172,112"/>
-        <polygon class="fct f8" points="188,52 140,26 108,42 152,62"/>
-        <polygon class="fct f9" points="140,26 62,52 108,42"/>
-      </g>
-    </svg>
-    <p class="fold__cap" id="foldCap" aria-live="polite"><span>One square of paper, nothing folded yet.</span></p>
-    <p class="fold__hint" id="foldHint">Keep scrolling</p>
-    <div class="fold__wipe" id="foldWipe" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -475,61 +500,12 @@
   <div class="wrap">
     <div class="wall">
       <figure data-rise><img data-img="delegation" alt="Education partners at a University Centre Leeds event" loading="lazy"><figcaption>Partner event, University Centre Leeds</figcaption></figure>
-      <figure data-rise><img data-img="hellostudy" alt="Shubhangi with a recruitment partner at an education fair" loading="lazy"><figcaption>With a recruitment partner</figcaption></figure>
+      <figure data-rise><img data-img="hellostudy" loading="lazy" decoding="async" alt="Shubhangi with a recruitment partner at an education fair" loading="lazy"><figcaption>With a recruitment partner</figcaption></figure>
       <figure data-rise><img data-img="rhacert" alt="Robin Hood Army volunteers holding certificates" loading="lazy"><figcaption>Robin Hood Army volunteers</figcaption></figure>
       <figure data-rise><img data-img="badge" alt="ST Alphe UK 2025 delegate badge" loading="lazy"><figcaption>ST Alphe UK 2025</figcaption></figure>
       <figure data-rise><img data-img="infosys_xpo" alt="Shubhangi presenting from an Infosys podium" loading="lazy"><figcaption>Presenting at Infosys</figcaption></figure>
       <figure data-rise><img data-img="vaccine" alt="Shubhangi at a vaccination camp" loading="lazy"><figcaption>Vaccination camp, Lucknow</figcaption></figure>
-      <figure data-rise><img data-img="stall" alt="Leeds Conservatoire stand" loading="lazy"><figcaption>Leeds Conservatoire</figcaption></figure>
-    </div>
-  </div>
-</section>
-
-<!-- BUCKET LIST: the paper tears open onto Barcelona as you scroll -->
-<section class="spain" id="spain" aria-labelledby="spainH">
-  <div class="spain__stage">
-    <div class="spain__inner">
-      <figure class="spain__art">
-        <svg class="spain__svg" id="spainSvg" viewBox="0 0 860 1154"
-             preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="spainSvgT">
-          <title id="spainSvgT">An illustration of the Sagrada Familia at night, a trail of trees spilling down from it to a small figure standing alone at the lower right</title>
-          <defs>
-            <linearGradient id="spainReveal" gradientUnits="objectBoundingBox"
-                            x1="0.797" y1="0.905" x2="0.288" y2="0.027">
-              <stop id="spainStopA" offset="0" stop-color="#fff"/>
-              <stop id="spainStopM" offset="0.0003" stop-color="#D2D2D2"/>
-              <stop id="spainStopB" offset="0.0006" stop-color="#000"/>
-            </linearGradient>
-            <filter id="spainRough" x="-30%" y="-30%" width="160%" height="160%"
-                    color-interpolation-filters="sRGB">
-              <feTurbulence type="fractalNoise" baseFrequency="0.0082 0.0125" numOctaves="4" seed="11" result="n"/>
-              <feDisplacementMap in="SourceGraphic" in2="n" scale="108" xChannelSelector="R" yChannelSelector="G"/>
-            </filter>
-            <radialGradient id="spainGlow">
-              <stop offset="0" stop-color="#D6B37C" stop-opacity="0.5"/>
-              <stop offset="0.45" stop-color="#B08840" stop-opacity="0.17"/>
-              <stop offset="1" stop-color="#9C7236" stop-opacity="0"/>
-            </radialGradient>
-            <filter id="spainTwinkle" x="-70%" y="-70%" width="240%" height="240%">
-              <feGaussianBlur stdDeviation="1.1"/>
-            </filter>
-            <mask id="spainMask">
-              <rect x="-160" y="-160" width="1180" height="1480" fill="url(#spainReveal)" filter="url(#spainRough)"/>
-            </mask>
-          </defs>
-          <g id="spainArtG" mask="url(#spainMask)">
-            <ellipse id="spainHalo" cx="408" cy="352" rx="396" ry="336" fill="url(#spainGlow)" opacity="0"/>
-            <image id="spainArt" href="{{IMG:spain_art}}" x="0" y="0" width="860" height="1154"/>
-            <g id="spainGlints" fill="#FBEDCB" filter="url(#spainTwinkle)"></g>
-          </g>
-        </svg>
-      </figure>
-      <div class="spain__copy" id="spainCopy">
-        <p class="eyebrow">The next adventure</p>
-        <h2 class="h-l" id="spainH">I want to see all of it.</h2>
-        <p class="spain__note">New places are the part I never tire of &mdash; the streets, the food, the way people do ordinary things differently. I travel every chance I get, and the list only ever grows.</p>
-        <p class="spain__kick"><span></span>Next up &middot; Barcelona, Spain</p>
-      </div>
+      <figure data-rise><img data-img="stall" loading="lazy" decoding="async" alt="Leeds Conservatoire stand" loading="lazy"><figcaption>Leeds Conservatoire</figcaption></figure>
     </div>
   </div>
 </section>
@@ -580,7 +556,7 @@
         <span class="magnet"><a class="btn btn--light" href="Shubhangi_Gupta_CV.pdf" download="Shubhangi_Gupta_CV.pdf" data-cv data-view="{{IMG:cv_page1}}|{{IMG:cv_page2}}" data-title="Curriculum vitae">Download my CV <svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true" style="margin-left:8px;vertical-align:-2px"><path d="M7 1v10M3 7.5 7 11.5l4-4M1 15h12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></span>
       </div>
     </div>
-    <figure class="contact__photo" style="margin:0"><img data-img="hellostudy" alt="Shubhangi with a recruitment partner at an education fair" width="900" height="1200"></figure>
+    <figure class="contact__photo" style="margin:0"><img data-img="hellostudy" loading="lazy" decoding="async" alt="Shubhangi with a recruitment partner at an education fair" width="900" height="1200"></figure>
   </div>
 </section>
 </main>

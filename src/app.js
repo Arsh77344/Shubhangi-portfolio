@@ -19,9 +19,13 @@ $$("[data-img]").forEach(function(img){if(SRC[img.dataset.img])img.src=SRC[img.d
 
 /* smooth scroll */
 var lenis=null;
-if(!RM&&typeof window.Lenis!=="undefined"){
+/* Smoothing is for wheels only. On a touch screen the browser's own scrolling
+   is hardware-driven and finger-accurate; routing it through a lerp makes the
+   page drift on after you lift your finger, which reads as the scroll getting
+   stuck or sliding to a different section on its own. */
+if(!RM&&FINE&&typeof window.Lenis!=="undefined"){
   try{
-    lenis=new Lenis({lerp:.085,smoothWheel:true});
+    lenis=new Lenis({lerp:.11,smoothWheel:true,syncTouch:false});
     if(hasG){gsap.ticker.add(function(t){lenis.raf(t*1000)});gsap.ticker.lagSmoothing(0)}
     else{(function raf(t){lenis.raf(t);requestAnimationFrame(raf)})(0)}
   }catch(e){lenis=null}
@@ -36,17 +40,33 @@ document.addEventListener("click",function(e){
   var a=e.target.closest("[data-scroll]");if(!a)return;
   e.preventDefault();scrollToEl(a.getAttribute("data-scroll"));
 });
-var scrollFns=[];
-function onScroll(fn){scrollFns.push(fn)}
-function runScroll(){for(var i=0;i<scrollFns.length;i++)scrollFns[i]()}
-if(lenis)lenis.on("scroll",runScroll);
-window.addEventListener("scroll",runScroll,{passive:true});
-window.addEventListener("resize",runScroll);
+var scrollFns=[],scrollTick=false;
+/* Every module used to run synchronously on every scroll event, each one
+   calling getBoundingClientRect, so a single flick forced a dozen layouts a
+   frame. Now they share one frame, and a module whose section is more than a
+   screen away does not run at all. */
+function onScroll(fn,el){scrollFns.push([fn,el||null])}
+function inRange(el){
+  if(!el)return true;
+  var r=el.getBoundingClientRect(),h=window.innerHeight;
+  return r.bottom>-h&&r.top<h*2;
+}
+function runScroll(){
+  scrollTick=false;
+  for(var i=0;i<scrollFns.length;i++){var f=scrollFns[i];if(inRange(f[1]))f[0]()}
+}
+function queueScroll(){if(!scrollTick){scrollTick=true;requestAnimationFrame(runScroll)}}
+if(lenis)lenis.on("scroll",queueScroll);
+window.addEventListener("scroll",queueScroll,{passive:true});
+window.addEventListener("resize",queueScroll);
 function prog(el){var r=el.getBoundingClientRect(),span=r.height-vh();return span>0?clamp(-r.top/span,0,1):0}
 
 /* loader */
 var loader=$("#loader"),loaderDone=false;
-if(hasG&&!RM){gsap.set("[data-name]",{yPercent:110});gsap.set("[data-hero]",{opacity:0,y:20})}
+if(hasG&&!RM){gsap.set("[data-name]",{yPercent:110});gsap.set("[data-hero]",{opacity:0,y:20});
+  gsap.set(".loader__mark span",{yPercent:115});gsap.set(".loader__sub,.loader__bar,.loader__row",{opacity:0,y:8});
+  gsap.to(".loader__mark span",{yPercent:0,duration:1,stagger:.1,ease:"expo.out",delay:.1});
+  gsap.to(".loader__sub,.loader__bar,.loader__row",{opacity:1,y:0,duration:.7,stagger:.08,ease:"power3.out",delay:.5});}
 if(lenis)lenis.stop();
 document.body.classList.add("is-locked");
 function heroIn(){
@@ -64,7 +84,7 @@ function finishLoader(){
   try{sessionStorage.setItem("sg-seen","1")}catch(e){}
   if(hasG&&!RM){
     gsap.timeline({onComplete:function(){loader.remove()}})
-      .to(".loader__core,.loader__hint",{opacity:0,y:-10,duration:.35})
+      .to(".loader__core,.loader__hint",{opacity:0,y:-14,duration:.4,ease:"power2.in"})
       .to(".loader__door--l",{xPercent:-101,duration:1.1,ease:"expo.inOut"},"-=.05")
       .to(".loader__door--r",{xPercent:101,duration:1.1,ease:"expo.inOut"},"<")
       .add(heroIn,"-=.75");
@@ -72,13 +92,33 @@ function finishLoader(){
 }
 (function(){
   var seen=false;try{seen=sessionStorage.getItem("sg-seen")==="1"}catch(e){}
-  var dur=RM?100:(seen?700:1900),t0=performance.now(),bar=$("#loaderBar"),cnt=$("#loaderCount");
+  var bar=$("#loaderBar"),cnt=$("#loaderCount"),place=$("#loaderPlace");
+  var PLACES=["Lucknow","Delhi","Mysore","Trivandrum","Pune","Leeds","Barcelona"];
+  /* The bar used to be a 1.9 second stopwatch that ran whether or not
+     anything had arrived. It now waits on the two things that decide
+     whether the first screen looks right: the hero photograph and the
+     fonts. MIN keeps it from flashing past on a fast line; MAX means a bad
+     connection is never a locked door. */
+  var MIN=RM?100:(seen?650:1500),MAX=RM?200:7000,t0=performance.now();
+  var ready=0,need=0,lastPlace=-1;
+  function arrived(){ready++}
+  var heroImg=$("#heroImg");
+  if(heroImg){need++;
+    if(heroImg.complete&&heroImg.naturalWidth)arrived();
+    else{heroImg.addEventListener("load",arrived);heroImg.addEventListener("error",arrived)}}
+  if(document.fonts&&document.fonts.ready){need++;document.fonts.ready.then(arrived)["catch"](arrived)}
   loader.addEventListener("click",finishLoader);
   function step(now){
     if(loaderDone)return;
-    var p=clamp((now-t0)/dur,0,1),e=1-Math.pow(1-p,3);
-    bar.style.transform="scaleX("+e+")";cnt.textContent=Math.round(e*100);
-    if(p<1)requestAnimationFrame(step);else setTimeout(finishLoader,150);
+    var el=now-t0,
+        real=need?ready/need:1,
+        p=Math.min(clamp(el/MIN,0,1),0.26+0.74*real);
+    if(el>=MAX)p=1;
+    bar.style.transform="scaleX("+p.toFixed(4)+")";
+    cnt.textContent=Math.round(p*100);
+    var i=Math.min(PLACES.length-1,Math.floor(p*PLACES.length));
+    if(i!==lastPlace&&place){lastPlace=i;place.textContent=PLACES[i]}
+    if(p<1||el<MIN)requestAnimationFrame(step);else setTimeout(finishLoader,220);
   }
   requestAnimationFrame(step);
 })();
@@ -119,7 +159,7 @@ function finishLoader(){
     end.style.pointerEvents=b>.5?"auto":"none";
     shade.style.opacity=(.12+.88*b).toFixed(2);
   }
-  fit();window.addEventListener("resize",fit);onScroll(upd);img.addEventListener("load",upd);upd();
+  fit();window.addEventListener("resize",fit);onScroll(upd,hero);img.addEventListener("load",upd);upd();
 })();
 
 /* reveals */
@@ -138,7 +178,7 @@ function finishLoader(){
 (function(){
   var tp=$("#curveText"),wrap=tp&&tp.closest(".curve");if(!tp)return;
   function upd(){var r=wrap.getBoundingClientRect();if(r.bottom<0||r.top>vh())return;var p=(vh()-r.top)/(vh()+r.height);tp.setAttribute("startOffset",(-40*p).toFixed(2)+"%")}
-  onScroll(upd);upd();
+  onScroll(upd,wrap);upd();
 })();
 
 /* departure board */
@@ -158,8 +198,11 @@ function setFlaps(el,text){
   });
 }
 
-/* journey globe, light edition */
-(function(){
+/* journey globe, light edition.
+   D3, topojson and the world outline are about 340 KB between them and are
+   needed by this one section, so none of it is fetched until the section is
+   within a couple of screens. */
+function __initGlobe(){
   var canvas=$("#globe");if(!canvas||typeof window.d3==="undefined"||typeof window.topojson==="undefined")return;
   var ctx=canvas.getContext("2d");
   var land=topojson.feature(LAND,LAND.objects.land),grat=d3.geoGraticule10();
@@ -182,14 +225,19 @@ function setFlaps(el,text){
   [fy,fc,ff].forEach(buildFlaps);
   var HOLD0=.9,TRAVEL=1.45,HOLD=.85,FINAL_T=1.2,FINAL_H=1.2;
   var TOTAL=HOLD0+legs.length*(TRAVEL+HOLD)+FINAL_T+FINAL_H;
-  var proj=d3.geoOrthographic().clipAngle(90).precision(.4),path=d3.geoPath(proj,ctx);
+  var COARSE=window.matchMedia&&matchMedia("(pointer:coarse)").matches;
+  var proj=d3.geoOrthographic().clipAngle(90).precision(COARSE?2:.4),path=d3.geoPath(proj,ctx);
   var W=0,H=0,dpr=1,cx=0,cy=0,R=0;
   var stops=$$("#jstops li"),section=$("#journey");
   var target=0,shown=-1,lastCard=-1,lastStatus="",heading=Math.PI/2;
   var plane=new Path2D("M12 0 L3.5 -2.2 L-3 -10 L-6.4 -10 L-2.6 -2.2 L-8.2 -1.7 L-10.6 -5.4 L-12.6 -5.4 L-11 0 L-12.6 5.4 L-10.6 5.4 L-8.2 1.7 L-2.6 2.2 L-6.4 10 L-3 10 L3.5 2.2 Z");
   var serif="Newsreader, Georgia, serif";
   function size(){
-    var r=canvas.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(window.devicePixelRatio||1,2);
+    /* A phone reports a device pixel ratio of 3, which meant drawing nine
+       times the pixels of a logical one, every frame, for a canvas the size
+       of a postcard. 1.4 is indistinguishable here and four times cheaper. */
+    var r=canvas.getBoundingClientRect();W=r.width;H=r.height;
+    dpr=Math.min(window.devicePixelRatio||1,COARSE?1.4:2);
     canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
     var narrow=W<980;cx=narrow?W*.5:W*.66;cy=narrow?H*.76:H*.5;R=narrow?Math.min(W*.4,H*.2):Math.min(H*.42,W*.28);shown=-1;
   }
@@ -225,7 +273,7 @@ function setFlaps(el,text){
     var sg=ctx.createRadialGradient(cx-rr*.4,cy-rr*.45,rr*.05,cx,cy,rr);
     sg.addColorStop(0,"#FFFDF8");sg.addColorStop(1,"#E9DCC7");
     ctx.beginPath();path({type:"Sphere"});ctx.fillStyle=sg;ctx.fill();
-    ctx.beginPath();path(grat);ctx.strokeStyle="rgba(92,18,48,.07)";ctx.lineWidth=.7;ctx.stroke();
+    if(!COARSE){ctx.beginPath();path(grat);ctx.strokeStyle="rgba(92,18,48,.07)";ctx.lineWidth=.7;ctx.stroke()}
     ctx.beginPath();path(land);ctx.fillStyle="rgba(92,18,48,.16)";ctx.fill();ctx.strokeStyle="rgba(92,18,48,.38)";ctx.lineWidth=.6;ctx.stroke();
     ctx.beginPath();path({type:"Sphere"});ctx.strokeStyle="rgba(92,18,48,.35)";ctx.lineWidth=1;ctx.stroke();
     ctx.setLineDash([3,6]);ctx.strokeStyle="rgba(92,18,48,.35)";ctx.lineWidth=1.2;
@@ -270,11 +318,46 @@ function setFlaps(el,text){
     stops.forEach(function(li,i){li.classList.toggle("is-on",i===s.stop);li.classList.toggle("is-past",i<s.stop)});
   }
   var ticking=false;
-  function loop(){var d=target-shown;if(shown<0||Math.abs(d)<.0004)shown=target;else shown+=d*(RM?1:.16);draw(shown);if(shown!==target)requestAnimationFrame(loop);else ticking=false}
+  /* Projecting the world outline is the expensive part of a frame. On a
+     touch screen the globe eases at half the frame rate, which no one can
+     see at this size and which gives the scroll its frames back. */
+  var gh=0;
+  function loop(){
+    var d=target-shown;
+    if(shown<0||Math.abs(d)<.0004)shown=target;else shown+=d*(RM?1:.16);
+    if(!(COARSE&&(gh^=1)&&shown!==target))draw(shown);
+    if(shown!==target)requestAnimationFrame(loop);else ticking=false
+  }
   function kick(){target=prog(section);if(!ticking){ticking=true;requestAnimationFrame(loop)}}
-  size();window.addEventListener("resize",function(){size();kick()});onScroll(kick);
+  size();window.addEventListener("resize",function(){size();kick()});onScroll(kick,section);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){shown=-1;kick()});
   kick();
+}
+
+/* ---- fetch the globe's dependencies only when the section comes near ---- */
+(function(){
+  var sec=$("#journey");if(!sec)return;
+  var started=false;
+  function load(src){return new Promise(function(ok,no){
+    var t=document.createElement("script");t.src=src;t.async=true;t.onload=ok;t.onerror=no;
+    document.head.appendChild(t);
+  })}
+  function go(){
+    if(started)return;
+    var r=sec.getBoundingClientRect();
+    if(r.top>vh()*2.5)return;
+    started=true;
+    Promise.all([
+      load("https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js")
+        .then(function(){return load("https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js")}),
+      fetch("assets/land-110m.json").then(function(r){return r.json()})
+    ]).then(function(res){
+      window.LAND=res[1];
+      __initGlobe();
+      runScroll();
+    }).catch(function(){ sec.classList.add("globe-off") });
+  }
+  onScroll(go);go();
 })();
 
 /* numbers: rolling odometer cards */
@@ -394,19 +477,24 @@ function setFlaps(el,text){
   while(mi<6||oi<more.length){if(mi<6&&tags.length%4===0)tags.push({t:main[mi++],m:1});else if(oi<more.length)tags.push({t:more[oi++],m:0});else tags.push({t:main[mi++],m:1})}
   var N=tags.length,pts=[];
   tags.forEach(function(tg,i){var y=1-(i/(N-1))*2,r=Math.sqrt(1-y*y),th=Math.PI*(3-Math.sqrt(5))*i;var s=document.createElement("span");s.className="sphere__tag"+(tg.m?" is-main":"");s.textContent=tg.t;el.appendChild(s);pts.push({x:Math.cos(th)*r,y:y,z:Math.sin(th)*r,el:s})});
-  var ax=0,ay=0,vx=.0012,vy=RM?0:.0035,drag=false,lx=0,ly=0,R=0,inView=false,raf=0;
+  var ax=0,ay=-0.5,vx=.0012,vy=RM?0:.0052,drag=false,lx=0,ly=0,R=0,inView=false,raf=0;
   function sz(){R=el.clientWidth*(el.clientWidth<520?.32:.4)}
+  var COARSE=window.matchMedia&&matchMedia("(pointer:coarse)").matches,half=0;
   function frame(){
-    if(!drag){vx*=.95;vy=vy*.95+(RM?0:.0035)*.05;ax+=vx;ay+=vy}
-    var cX=Math.cos(ax),sX=Math.sin(ax),cY=Math.cos(ay),sY=Math.sin(ay);
-    pts.forEach(function(p){var x=p.x*cY+p.z*sY,z=-p.x*sY+p.z*cY,y=p.y*cX-z*sX;z=p.y*sX+z*cX;var sc=.6+.4*(z+1)/2,op=.15+.85*(z+1)/2;p.el.style.transform="translate(-50%,-50%) translate3d("+(x*R).toFixed(1)+"px,"+(y*R).toFixed(1)+"px,0) scale("+sc.toFixed(3)+")";p.el.style.opacity=op.toFixed(2);p.el.style.zIndex=Math.round(z*100)+100});
     if(inView)raf=requestAnimationFrame(frame);
+    // 28 tags each take a transform, an opacity and a z-index; on a phone
+    // that is enough to cost a frame, so it runs at half rate there
+    if(COARSE&&inView&&(half^=1)){if(!drag){ax+=vx;ay+=vy}return}
+    if(!drag){vx*=.95;vy=vy*.95+(RM?0:.0052)*.05;ax+=vx;ay+=vy}
+    var cX=Math.cos(ax),sX=Math.sin(ax),cY=Math.cos(ay),sY=Math.sin(ay);
+    pts.forEach(function(p){var x=p.x*cY+p.z*sY,z=-p.x*sY+p.z*cY,y=p.y*cX-z*sX;z=p.y*sX+z*cX;var sc=.6+.4*(z+1)/2,op=.15+.85*(z+1)/2;p.el.style.transform="translate(-50%,-50%) translate3d("+(x*R).toFixed(1)+"px,"+(y*R).toFixed(1)+"px,0) scale("+sc.toFixed(3)+")";p.el.style.opacity=op.toFixed(2);
+      var zi=Math.round(z*12)+20;if(p.z0!==zi){p.el.style.zIndex=zi;p.z0=zi}});
   }
   el.addEventListener("pointerdown",function(e){drag=true;lx=e.clientX;ly=e.clientY;el.setPointerCapture(e.pointerId)});
-  el.addEventListener("pointermove",function(e){if(!drag)return;var dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;vy=dx*.006;vx=-dy*.006;ay+=vy;ax+=vx});
+  el.addEventListener("pointermove",function(e){if(!drag)return;var dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;vy=dx*.006;vx=-dy*.006;ay+=vy;ax+=vx},{passive:true});
   ["pointerup","pointercancel"].forEach(function(t){el.addEventListener(t,function(){drag=false})});
   sz();window.addEventListener("resize",sz);
-  var io=new IntersectionObserver(function(es){inView=es[0].isIntersecting;if(inView){cancelAnimationFrame(raf);raf=requestAnimationFrame(frame)}});io.observe(el);frame();
+  var io=new IntersectionObserver(function(es){inView=es[0].isIntersecting;if(inView){cancelAnimationFrame(raf);raf=requestAnimationFrame(frame)}},{rootMargin:"120px"});io.observe(el);frame();
 })();
 
 /* photo reel */
@@ -671,8 +759,13 @@ var $=function(q,c){return (c||document).querySelector(q)},
 var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
 var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
 var ticking=false,fns=[];
-function onScroll(fn){fns.push(fn);}
-function run(){ticking=false;for(var i=0;i<fns.length;i++)fns[i]();}
+function onScroll(fn,el){fns.push([fn,el||null]);}
+function inRange(el){
+  if(!el)return true;
+  var r=el.getBoundingClientRect(),h=window.innerHeight;
+  return r.bottom>-h&&r.top<h*2;
+}
+function run(){ticking=false;for(var i=0;i<fns.length;i++){var f=fns[i];if(inRange(f[1]))f[0]()}}
 window.addEventListener("scroll",function(){if(!ticking){ticking=true;requestAnimationFrame(run)}},{passive:true});
 window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAnimationFrame(run)}});
 
@@ -769,106 +862,6 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
   else if(wide.addListener)wide.addListener(mode);
 })();
 
-/* ---- the fold: a square of paper becomes a swan, then hands the page over ----
-   Ten facets over sixteen SHARED vertices. Flat they tile the square exactly;
-   folded they are the swan. Because the facets index into one vertex list, a
-   shared edge can never come apart, so every frame is a whole sheet of paper.
-   The last stretch slides the next chapter up over the finished bird. ---- */
-(function(){
-  var sec=$("#fold"),g=$("#foldG"),cap=$("#foldCap"),hint=$("#foldHint"),
-      shadow=$("#foldShadow"),wipe=$("#foldWipe");
-  if(!sec||!g)return;
-  var F=$$(".fct",g),N=F.length;
-  if(N!==10)return;
-
-  var FLAT=[[200,20],[200,300],[60,160],[340,160],[130,20],[60,90],[95,20],[60,55],
-            [77,20],[60,37],[60,20],[270,20],[340,20],[340,230],[340,300],[60,300]];
-  var SWAN=[[214,148],[200,272],[146,192],[290,180],[208,98],[172,112],[188,52],[152,62],
-            [140,26],[108,42],[62,52],[306,88],[338,96],[296,236],[238,276],[142,244]];
-  var FACETS=[[0,11,12,3],[3,13,1],[13,14,1],[2,15,1],[0,3,1],
-              [0,1,2],[0,4,5,2],[4,6,7,5],[6,8,9,7],[8,10,9]];
-  var CX=200,CY=160;
-
-  // a gathered middle: halfway between flat and swan, drawn in towards the centre
-  var MID=[],i,j;
-  for(i=0;i<FLAT.length;i++){
-    var mx=FLAT[i][0]+(SWAN[i][0]-FLAT[i][0])*0.5,
-        my=FLAT[i][1]+(SWAN[i][1]-FLAT[i][1])*0.5;
-    MID.push([CX+(mx-CX)*0.8,CY+(my-CY)*0.8]);
-  }
-
-  // the fold runs over the first stretch, then it holds, then the page hands over
-  var FOLD_END=0.62,HOLD_END=0.76;
-  var LINES=["One square of paper, nothing folded yet.",
-             "The first creases go in.",
-             "The corners lift and it takes shape.",
-             "A swan. The same single sheet."];
-
-  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
-  function clamp01(v){return v<0?0:(v>1?1:v)}
-  var V=[];for(i=0;i<FLAT.length;i++)V.push([0,0]);
-
-  var lastLine=-1;
-  function draw(p){
-    var fp=clamp01(p/FOLD_END);          // the folding itself
-    var wp=clamp01((p-HOLD_END)/(1-HOLD_END)); // the hand-over
-    var e=ease(fp),t=e*2,lo,hi,f;
-    if(t<1){lo=FLAT;hi=MID;f=t}else{lo=MID;hi=SWAN;f=t-1}
-    for(i=0;i<V.length;i++){
-      V[i][0]=lo[i][0]+(hi[i][0]-lo[i][0])*f;
-      V[i][1]=lo[i][1]+(hi[i][1]-lo[i][1])*f;
-    }
-    for(i=0;i<N;i++){
-      var idx=FACETS[i],out="";
-      for(j=0;j<idx.length;j++)out+=(j?" ":"")+V[idx[j]][0].toFixed(1)+","+V[idx[j]][1].toFixed(1);
-      F[i].setAttribute("points",out);
-    }
-    // a slight turn and squeeze through the middle, then it settles and lifts away
-    // the sheet comes forward as it folds, then lifts away at the hand-over
-    var sx=1-0.16*Math.sin(Math.PI*fp),lift=12*e+46*ease(wp),
-        sc=(0.70+0.30*e)*(1+0.07*ease(wp));
-    g.setAttribute("transform",
-      "translate("+CX+" "+CY+") rotate("+(-4*e).toFixed(2)+") scale("+(sx*sc).toFixed(3)+" "+sc.toFixed(3)+") translate("+(-CX)+" "+(-CY-lift).toFixed(1)+")");
-    if(shadow){
-      shadow.setAttribute("rx",(132*sx-26*e).toFixed(1));
-      shadow.setAttribute("opacity",(0.09+0.14*e-0.1*ease(wp)).toFixed(3));
-    }
-    if(wipe)wipe.style.transform="translate3d(0,"+((1-ease(wp))*100).toFixed(2)+"%,0)";
-    var li=fp<.3?0:(fp<.62?1:(fp<.9?2:3));
-    if(cap&&li!==lastLine){
-      lastLine=li;
-      var sp=cap.firstElementChild;
-      if(!sp){cap.innerHTML="<span></span>";sp=cap.firstElementChild}
-      if(RM){sp.textContent=LINES[li]}
-      else{
-        cap.classList.add("is-out");
-        setTimeout(function(){sp.textContent=LINES[li];cap.classList.remove("is-out")},220);
-      }
-    }
-    if(hint)hint.classList.toggle("is-done",p>.6);
-  }
-
-  if(RM){draw(FOLD_END);return}
-
-  // the scroll sets a target; the shape eases towards it so nothing ever jumps
-  var target=0,cur=0,raf=0;
-  function tick(){
-    raf=0;
-    cur+=(target-cur)*0.12;
-    if(Math.abs(target-cur)<0.0006)cur=target;
-    draw(cur);
-    if(cur!==target)raf=requestAnimationFrame(tick);
-  }
-  function step(){
-    var r=sec.getBoundingClientRect(),span=r.height-window.innerHeight;
-    target=span>0?clamp01(-r.top/span):0;
-    if(!raf)raf=requestAnimationFrame(tick);
-  }
-  onScroll(step);
-  draw(0);step();
-})();
-
-
 /* ---- bucket list: Barcelona arrives the way the picture is drawn ----
    One progress value drives the whole scene. The reveal runs along the same
    diagonal the artwork does: it starts where she stands, climbs the trail of
@@ -895,13 +888,20 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
 
   function clamp01(v){return v<0?0:(v>1?1:v)}
   function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
-  function out3(t){return 1-Math.pow(1-t,3)}
+  /* A cubic ease-out put three quarters of the reveal into the first third
+     of the scroll, so on a phone the whole thing was over in one flick.
+     Smoothstep spreads it evenly and still softens both ends. */
+  function smooth(t){return t*t*(3-2*t)}
 
   var BAND=0.12, FLOOR=0.196;
+  var artEl=$("#spainArt");
   function draw(p){
+    // the picture is 250 KB and sits deep in the page: it is not asked for
+    // until the section is close enough for this to run at all
+    if(artEl&&artEl.dataset.href){artEl.setAttribute("href",artEl.dataset.href);delete artEl.dataset.href}
     // the torn edge sweeps from her feet up the trail to the towers
     // she and her shadow are already standing there; the tear grows from her
-    var s=FLOOR+(1-FLOOR)*out3(clamp01(p/0.80)),
+    var s=FLOOR+(1-FLOOR)*smooth(clamp01(p/0.88)),
         b=s*(1+BAND), a=b-BAND;
     var ca=clamp01(a),cb=Math.max(clamp01(b),ca+0.0006);
     A.setAttribute("offset",ca.toFixed(4));
@@ -914,7 +914,7 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
       "translate(430 577) scale("+k.toFixed(4)+") translate(-430 -577) translate(0 "+ty.toFixed(1)+")");
 
     // warm light bleeds out from behind the basilica once it is open
-    if(halo)halo.setAttribute("opacity",(ease(clamp01((p-0.34)/0.42))*0.92).toFixed(3));
+    if(halo)halo.setAttribute("opacity",(ease(clamp01((p-0.40)/0.44))*0.92).toFixed(3));
 
     // each light flares as the edge passes it, then settles
     for(var i=0;i<glints.length;i++){
@@ -927,16 +927,18 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
 
     // the words arrive last
     if(copy){
-      var c=ease(clamp01((p-0.54)/0.34));
+      var c=ease(clamp01((p-0.60)/0.32));
       copy.style.opacity=c.toFixed(3);
       copy.style.transform="translateY("+((1-c)*22).toFixed(1)+"px)";
     }
   }
 
   if(RM){draw(1);return}
+  // a finger wants the picture to track it; a wheel wants the glide
+  var EASE=(window.matchMedia&&matchMedia("(pointer:coarse)").matches)?0.17:0.085;
   var target=0,cur=0,raf=0;
   function tick(){
-    raf=0;cur+=(target-cur)*0.085;
+    raf=0;cur+=(target-cur)*EASE;
     if(Math.abs(target-cur)<0.0005)cur=target;
     draw(cur);
     if(cur!==target)raf=requestAnimationFrame(tick);
@@ -946,7 +948,7 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
     target=span>0?clamp01(-r.top/span):0;
     if(!raf)raf=requestAnimationFrame(tick);
   }
-  onScroll(step);
+  onScroll(step,sec);
   draw(0);step();
 })();
 

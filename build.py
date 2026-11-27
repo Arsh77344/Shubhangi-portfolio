@@ -48,16 +48,25 @@ def page_html(p):
     o.append(f'<nav class="page__next" aria-label="More"><button type="button" class="page__back" data-close>{ARROW_L} Back to the portfolio</button><a href="#{n[0]}"><small>{n[1]}</small><b>{n[2]}</b></a></nav></div></div></article>')
     return '\n'.join(o)
 USED=set()
+import hashlib, shutil
+ASSETS = os.path.join(ROOT, 'assets')
 def b64(n):
+    """Returns the served path of an image, not its bytes.
+
+    These used to be inlined as base64, which made index.html 4.9 MB: the
+    browser had to download and parse every photograph before it could paint
+    a single word. As files they load in parallel, lazily, and stay cached
+    between visits. The hash retires an old copy when an image is replaced."""
     USED.add(n)
     with open(os.path.join(SRC,'images',n+'.webp'),'rb') as f:
-        return 'data:image/webp;base64,'+base64.b64encode(f.read()).decode()
+        h = hashlib.sha1(f.read()).hexdigest()[:8]
+    return 'assets/'+n+'.webp?v='+h
 body=open(os.path.join(SRC,'body.html'),encoding='utf-8').read().replace('{{PAGES}}','\n'.join(page_html(p) for p in PAGES))
 body=body.replace('{{JOURNAL}}',journal.journal_pages()).replace('{{JTEASER}}',journal.teaser())
 body=body.replace('{{CERTS}}',certs.certs_html())
 body='<style>:root{--ren:url('+b64('renaissance_bg')+');--col:url('+b64('columns_bg')+')}</style>\n'+body
 body=re.sub(r'\{\{IMG:(\w+)\}\}',lambda m:b64(m.group(1)),body)
-css=open(os.path.join(SRC,'style.css'),encoding='utf-8').read(); js=open(os.path.join(SRC,'app.js'),encoding='utf-8').read(); land=open(os.path.join(SRC,'data','land-110m.json'),encoding='utf-8').read()
+css=open(os.path.join(SRC,'style.css'),encoding='utf-8').read(); js=open(os.path.join(SRC,'app.js'),encoding='utf-8').read()
 head='''<!doctype html>
 <html lang="en-GB" class="no-js">
 <head>
@@ -84,9 +93,6 @@ head='''<!doctype html>
 tail='''
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
-<script>var LAND='''+land+''';</script>
 <script>
 '''+js+'''
 </script>
@@ -95,5 +101,16 @@ tail='''
 '''
 out=head+body+tail
 with open(os.path.join(ROOT,'index.html'),'w',encoding='utf-8') as f: f.write(out)
-print('index.html written,',len(out.encode())//1024,'KB;',len(USED),'images embedded')
+
+# the images the page actually asks for, plus the world outline the globe
+# fetches once the journey section comes close
+os.makedirs(ASSETS, exist_ok=True)
+want = {n+'.webp' for n in USED} | {'land-110m.json'}
+for n in sorted(USED):
+    shutil.copyfile(os.path.join(SRC,'images',n+'.webp'), os.path.join(ASSETS,n+'.webp'))
+shutil.copyfile(os.path.join(SRC,'data','land-110m.json'), os.path.join(ASSETS,'land-110m.json'))
+for f in os.listdir(ASSETS):                      # drop anything no longer used
+    if f not in want: os.remove(os.path.join(ASSETS,f))
+kb = sum(os.path.getsize(os.path.join(ASSETS,f)) for f in os.listdir(ASSETS))//1024
+print('index.html written,',len(out.encode())//1024,'KB;',len(USED),'images in assets/ (',kb,'KB)')
 if '--list-images' in sys.argv: print(sorted(USED))
