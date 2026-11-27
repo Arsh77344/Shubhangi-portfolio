@@ -869,66 +869,75 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
 })();
 
 
-/* ---- bucket list: the paper tears open onto Barcelona as you scroll ----
-   One progress value drives everything: the torn reveal sweeps up from the
-   figure's feet toward the spires, dust settles along the way, and the words
-   arrive last. Nothing pops in; every part eases from the same number. ---- */
+/* ---- bucket list: Barcelona arrives the way the picture is drawn ----
+   One progress value drives the whole scene. The reveal runs along the same
+   diagonal the artwork does: it starts where she stands, climbs the trail of
+   trees, and opens onto the basilica last. The mask edge is displaced by
+   turbulence, so it crumbles rather than wipes. Nothing pops in. ---- */
 (function(){
   var sec=$("#spain"),svg=$("#spainSvg");if(!sec||!svg)return;
-  var A=$("#spainStopA"),B=$("#spainStopB"),art=$("#spainArtG"),dust=$("#spainDust"),
-      fig=$("#spainFigure"),shadow=$("#spainShadow"),copy=$("#spainCopy");
-  if(!A||!B)return;
+  var A=$("#spainStopA"),M=$("#spainStopM"),B=$("#spainStopB"),art=$("#spainArtG"),
+      halo=$("#spainHalo"),glintG=$("#spainGlints"),copy=$("#spainCopy");
+  if(!A||!B||!art)return;
 
-  // a trail of torn specks running from the artwork down to where she stands
-  var NS="http://www.w3.org/2000/svg",seed=97;
-  function rnd(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff}
-  var specks=[];
-  for(var i=0;i<78;i++){
-    var t=i/77, sp=Math.pow(t,0.78);
-    var x=468+sp*172+(rnd()-0.5)*54*(1-t*0.45);
-    var y=598+sp*176+(rnd()-0.5)*48*(1-t*0.45);
-    var r=(2.6-2.1*t)*(0.45+rnd()*0.8);
-    var c=document.createElementNS(NS,"circle");
-    c.setAttribute("cx",x.toFixed(1));c.setAttribute("cy",y.toFixed(1));
-    c.setAttribute("r",Math.max(0.5,r).toFixed(2));
-    c.setAttribute("fill",rnd()>0.42?"#7A2238":"#9C7236");
-    c.setAttribute("opacity","0");
-    dust.appendChild(c);specks.push({el:c,t:t});
+  // lights that catch as the tear reaches them: spires first, then the street
+  var NS="http://www.w3.org/2000/svg",
+      STAR="M0,-12 Q1.7,-2.5 11.5,0 Q1.7,2.5 0,12 Q-1.7,2.5 -11.5,0 Q-1.7,-2.5 0,-12 Z",
+      // x, y, the sweep position that uncovers it, and its size
+      SPOTS=[[326,65,.875,.80],[400,92,.840,.60],[248,331,.745,.52],[457,425,.638,.50],
+             [111,640,.605,.44],[244,593,.598,.42],[461,615,.530,.44]],
+      glints=[];
+  if(glintG)for(var i=0;i<SPOTS.length;i++){
+    var p0=document.createElementNS(NS,"path");
+    p0.setAttribute("d",STAR);p0.setAttribute("opacity","0");
+    glintG.appendChild(p0);glints.push({el:p0,x:SPOTS[i][0],y:SPOTS[i][1],t:SPOTS[i][2],k:SPOTS[i][3]});
   }
 
   function clamp01(v){return v<0?0:(v>1?1:v)}
   function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+  function out3(t){return 1-Math.pow(1-t,3)}
 
+  var BAND=0.12, FLOOR=0.196;
   function draw(p){
-    // the tear opens from the lower right, where she is, up toward the towers
-    var e=ease(p);
-    var b=clamp01(e*1.34), a=clamp01(e*1.34-0.24);
-    A.setAttribute("offset",a.toFixed(4));
-    B.setAttribute("offset",Math.max(b,a+0.004).toFixed(4));
-    // the artwork settles down into place rather than arriving finished
-    art.setAttribute("transform","translate(0 "+((1-e)*44).toFixed(1)+")");
-    // she is there from early on, and the light finds her
-    var f=clamp01((p-0.04)/0.22);
-    fig.setAttribute("opacity",ease(f).toFixed(3));
-    fig.setAttribute("transform","translate(0 "+((1-ease(f))*16).toFixed(1)+")");
-    shadow.setAttribute("opacity",(ease(f)*0.16).toFixed(3));
-    // each speck lights as the tear passes it
-    for(var i=0;i<specks.length;i++){
-      var s=specks[i], local=clamp01((e*1.3-0.06-s.t*0.62)/0.26);
-      s.el.setAttribute("opacity",(ease(local)*(0.85-s.t*0.4)).toFixed(3));
+    // the torn edge sweeps from her feet up the trail to the towers
+    // she and her shadow are already standing there; the tear grows from her
+    var s=FLOOR+(1-FLOOR)*out3(clamp01(p/0.80)),
+        b=s*(1+BAND), a=b-BAND;
+    var ca=clamp01(a),cb=Math.max(clamp01(b),ca+0.0006);
+    A.setAttribute("offset",ca.toFixed(4));
+    if(M)M.setAttribute("offset",(ca+(cb-ca)*0.72).toFixed(4));   // solid sooner, thin crumbling fringe
+    B.setAttribute("offset",cb.toFixed(4));
+
+    // the whole picture settles into place instead of arriving finished
+    var e=ease(clamp01(p/0.9)), k=1+0.042*(1-e), ty=(1-e)*54;
+    art.setAttribute("transform",
+      "translate(430 577) scale("+k.toFixed(4)+") translate(-430 -577) translate(0 "+ty.toFixed(1)+")");
+
+    // warm light bleeds out from behind the basilica once it is open
+    if(halo)halo.setAttribute("opacity",(ease(clamp01((p-0.34)/0.42))*0.92).toFixed(3));
+
+    // each light flares as the edge passes it, then settles
+    for(var i=0;i<glints.length;i++){
+      var g=glints[i],l=clamp01((s-g.t)/0.085),f=ease(l),
+          sc=g.k*(f<0.5?f*2*1.7:1.7-(f*2-1)*0.7),
+          op=(f<0.5?f*2:1-(f*2-1)*0.42)*0.78;
+      g.el.setAttribute("opacity",op.toFixed(3));
+      g.el.setAttribute("transform","translate("+g.x+" "+g.y+") scale("+Math.max(0.001,sc).toFixed(3)+")");
     }
+
+    // the words arrive last
     if(copy){
-      var c=clamp01((p-0.52)/0.3);
-      copy.style.opacity=ease(c).toFixed(3);
-      copy.style.transform="translateY("+((1-ease(c))*18).toFixed(1)+"px)";
+      var c=ease(clamp01((p-0.54)/0.34));
+      copy.style.opacity=c.toFixed(3);
+      copy.style.transform="translateY("+((1-c)*22).toFixed(1)+"px)";
     }
   }
 
   if(RM){draw(1);return}
   var target=0,cur=0,raf=0;
   function tick(){
-    raf=0;cur+=(target-cur)*0.11;
-    if(Math.abs(target-cur)<0.0006)cur=target;
+    raf=0;cur+=(target-cur)*0.085;
+    if(Math.abs(target-cur)<0.0005)cur=target;
     draw(cur);
     if(cur!==target)raf=requestAnimationFrame(tick);
   }

@@ -489,39 +489,46 @@
 <section class="spain" id="spain" aria-labelledby="spainH">
   <div class="spain__stage">
     <div class="spain__inner">
-      <svg class="spain__svg" id="spainSvg" viewBox="0 0 820 900"
-           preserveAspectRatio="xMidYMin slice" role="img" aria-labelledby="spainSvgT">
-        <title id="spainSvgT">The Sagrada Família torn from paper, with a figure standing before it</title>
-        <defs>
-          <linearGradient id="spainReveal" gradientUnits="objectBoundingBox" x1="1" y1="1" x2="0" y2="0">
-            <stop id="spainStopA" offset="0" stop-color="#fff"/>
-            <stop id="spainStopB" offset="0.004" stop-color="#000"/>
-          </linearGradient>
-          <filter id="spainRough" x="-25%" y="-25%" width="150%" height="150%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.011 0.017" numOctaves="4" seed="5" result="n"/>
-            <feDisplacementMap in="SourceGraphic" in2="n" scale="86" xChannelSelector="R" yChannelSelector="G"/>
-          </filter>
-          <filter id="spainSoft" x="-60%" y="-180%" width="220%" height="460%">
-            <feGaussianBlur stdDeviation="5"/>
-          </filter>
-          <mask id="spainMask">
-            <rect x="-80" y="-80" width="980" height="1060" fill="url(#spainReveal)" filter="url(#spainRough)"/>
-          </mask>
-        </defs>
-        <g id="spainArtG" mask="url(#spainMask)">
-          <image id="spainArt" href="{{IMG:spain_art}}" x="0" y="0" width="560" height="645"/>
-          <g id="spainDust"></g>
-        </g>
-        <ellipse id="spainShadow" cx="704" cy="791" rx="62" ry="5.5" fill="#2A1C1F" opacity="0" filter="url(#spainSoft)"/>
-        <g id="spainFigure" opacity="0">
-          <ellipse cx="660" cy="712" rx="7.2" ry="8.6" fill="#5C1230"/>
-          <path d="M653,724 C650.5,730 649,741 648,755 L647,792 L673,792 L672,755 C671,741 669.5,730 667,724 C663.8,721 656.2,721 653,724 Z" fill="#5C1230"/>
-        </g>
-      </svg>
+      <figure class="spain__art">
+        <svg class="spain__svg" id="spainSvg" viewBox="0 0 860 1154"
+             preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="spainSvgT">
+          <title id="spainSvgT">An illustration of the Sagrada Familia at night, a trail of trees spilling down from it to a small figure standing alone at the lower right</title>
+          <defs>
+            <linearGradient id="spainReveal" gradientUnits="objectBoundingBox"
+                            x1="0.797" y1="0.905" x2="0.288" y2="0.027">
+              <stop id="spainStopA" offset="0" stop-color="#fff"/>
+              <stop id="spainStopM" offset="0.0003" stop-color="#D2D2D2"/>
+              <stop id="spainStopB" offset="0.0006" stop-color="#000"/>
+            </linearGradient>
+            <filter id="spainRough" x="-30%" y="-30%" width="160%" height="160%"
+                    color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="0.0082 0.0125" numOctaves="4" seed="11" result="n"/>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="108" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+            <radialGradient id="spainGlow">
+              <stop offset="0" stop-color="#D6B37C" stop-opacity="0.5"/>
+              <stop offset="0.45" stop-color="#B08840" stop-opacity="0.17"/>
+              <stop offset="1" stop-color="#9C7236" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="spainTwinkle" x="-70%" y="-70%" width="240%" height="240%">
+              <feGaussianBlur stdDeviation="1.1"/>
+            </filter>
+            <mask id="spainMask">
+              <rect x="-160" y="-160" width="1180" height="1480" fill="url(#spainReveal)" filter="url(#spainRough)"/>
+            </mask>
+          </defs>
+          <g id="spainArtG" mask="url(#spainMask)">
+            <ellipse id="spainHalo" cx="408" cy="352" rx="396" ry="336" fill="url(#spainGlow)" opacity="0"/>
+            <image id="spainArt" href="{{IMG:spain_art}}" x="0" y="0" width="860" height="1154"/>
+            <g id="spainGlints" fill="#FBEDCB" filter="url(#spainTwinkle)"></g>
+          </g>
+        </svg>
+      </figure>
       <div class="spain__copy" id="spainCopy">
-        <p class="eyebrow">Still on the list</p>
+        <p class="eyebrow">The next adventure</p>
         <h2 class="h-l" id="spainH">Barcelona.</h2>
-        <p class="spain__note">The Sagrada Família, and the long way round to it.</p>
+        <p class="spain__note">Every new city has taught me something I could never have read. Gaud&iacute;'s basilica is the one still on the list &mdash; and I intend to take the long way to it.</p>
+        <p class="spain__kick"><span></span>Barcelona &middot; Spain &middot; still on the list</p>
       </div>
     </div>
   </div>
