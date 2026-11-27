@@ -26,7 +26,7 @@
   --olive:#5B6B3A;
   --ink:#2A1C1F;
   --ink-soft:rgba(42,28,31,.7);
-  --ink-faint:rgba(42,28,31,.5);
+  --ink-faint:rgba(42,28,31,.66);   /* .5 gave 3.2:1 on paper, under the 4.5:1 floor */
   --rule:rgba(92,18,48,.14);
   --rule-strong:rgba(92,18,48,.28);
   --on-wine:#F7EFE3;
@@ -216,7 +216,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 .board{background:var(--wine-deep);color:#F2D9A9;padding:16px 18px 14px;box-shadow:0 30px 60px -30px rgba(58,10,28,.55)}
 .board__head{display:flex;justify-content:space-between;font-size:.72rem;font-weight:700;color:rgba(242,217,169,.6);margin-bottom:10px;letter-spacing:.06em}
 .board__row{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:6px}
-.board__lbl{font-size:.7rem;font-weight:600;color:rgba(242,217,169,.55);width:62px}
+.board__lbl{font-size:.7rem;font-weight:600;color:rgba(242,217,169,.72);width:62px}
 .flaps{display:flex;gap:3px}
 .flap{position:relative;width:1.18em;height:1.6em;background:#24060F;color:#F2D9A9;font-family:"Manrope",ui-monospace,monospace;font-weight:700;font-size:clamp(.9rem,1.25vw,1.15rem);display:grid;place-items:center;border-radius:2px;overflow:hidden}
 .flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.6)}
@@ -374,8 +374,17 @@ p{margin:0 0 1.1em;max-width:64ch}
 .chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0 0 26px;padding:0}
 .chips li{font-size:.84rem;font-weight:600;padding:6px 12px;border:1px solid var(--rule-strong);color:var(--wine)}
 .edu__card .more{margin-top:auto;align-self:flex-start}
-.diagram{display:grid;grid-template-columns:auto 1fr 1fr;gap:5px;font-size:.84rem;margin:4px 0 26px;max-width:440px}
-.diagram div{padding:12px;background:var(--paper)}
+/* role="table" requires its cells to sit inside role="row"; they were direct
+   children, which left the accessibility tree malformed for anything reading
+   the page without eyes. The rows are real elements now, and subgrid keeps
+   the columns lined up across them. */
+.diagram{display:grid;gap:5px;font-size:.84rem;margin:4px 0 26px;max-width:440px}
+.diagram__r{display:grid;grid-template-columns:.92fr 1fr 1fr;gap:5px}
+@supports (grid-template-columns:subgrid){
+  .diagram{grid-template-columns:auto 1fr 1fr}
+  .diagram__r{grid-column:1/-1;grid-template-columns:subgrid}
+}
+.diagram__r>div{padding:12px;background:var(--paper)}
 .diagram .h{background:transparent;font-weight:700;color:var(--wine);padding:6px 8px}
 
 /* skills */
@@ -1490,9 +1499,9 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
         <ul class="chips"><li>Course Representative</li><li>International marketing</li><li>Consumer research</li></ul>
         <p class="soft" style="margin-bottom:12px"><b style="color:var(--ink)">Dissertation:</b> how NGO type and message appeal shape consumer involvement, and the role of scepticism.</p>
         <div class="diagram" role="table" aria-label="Dissertation experiment design">
-          <div class="h" role="columnheader"></div><div class="h" role="columnheader">Emotional</div><div class="h" role="columnheader">Rational</div>
-          <div class="h" role="rowheader">Local NGO</div><div role="cell">Group A</div><div role="cell">Group B</div>
-          <div class="h" role="rowheader">Global NGO</div><div role="cell">Group C</div><div role="cell">Group D</div>
+          <div class="diagram__r" role="row"><div class="h" role="columnheader"></div><div class="h" role="columnheader">Emotional</div><div class="h" role="columnheader">Rational</div></div>
+          <div class="diagram__r" role="row"><div class="h" role="rowheader">Local NGO</div><div role="cell">Group A</div><div role="cell">Group B</div></div>
+          <div class="diagram__r" role="row"><div class="h" role="rowheader">Global NGO</div><div role="cell">Group C</div><div role="cell">Group D</div></div>
         </div>
         <button type="button" class="more" data-open="msc-leeds" data-cursor="Read">Read about the MSc <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></button>
       </article>
@@ -2069,7 +2078,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 <div class="page__body"><div class="wrap">
 <div class="page__cols"><h2>The story</h2><div><p class="lede">A deliberate step: from implementing business change to understanding how global brands position themselves and enter new markets.</p><p class="soft">I was elected Student Course Representative for the Marketing Department, and wrote my dissertation on how people respond to charities, and why.</p></div></div>
 <ul class="page__stats"><li><strong>2:1</strong><span>final grade</span></li><li><strong>2 x 2</strong><span>experiment design</span></li><li><strong>Up to 20%</strong><span>more engagement from emotional appeals</span></li></ul>
-<div class="page__cols"><h2>What I did</h2><div><ul class="page__list"><li>Dissertation: <em>Exploring the Effects of NGO Type and Message Appeal on Consumer Involvement and the Role of NGO Scepticism.</em></li><li>Designed a 2 x 2 experiment comparing local and global NGOs, and emotional and rational appeals.</li><li>Found that global NGOs drew less scepticism than local ones, and emotional appeals less than rational ones, with scepticism shaping engagement.</li><li>Emotional appeals increased engagement by up to 20%.</li></ul><div style="margin-top:34px"><p class="eyebrow">The design</p><div class="diagram" role="table" aria-label="Experiment design"><div class="h" role="columnheader"></div><div class="h" role="columnheader">Emotional appeal</div><div class="h" role="columnheader">Rational appeal</div><div class="h" role="rowheader">Local NGO</div><div role="cell">Group A</div><div role="cell">Group B</div><div class="h" role="rowheader">Global NGO</div><div role="cell">Group C</div><div role="cell">Group D</div></div></div></div></div>
+<div class="page__cols"><h2>What I did</h2><div><ul class="page__list"><li>Dissertation: <em>Exploring the Effects of NGO Type and Message Appeal on Consumer Involvement and the Role of NGO Scepticism.</em></li><li>Designed a 2 x 2 experiment comparing local and global NGOs, and emotional and rational appeals.</li><li>Found that global NGOs drew less scepticism than local ones, and emotional appeals less than rational ones, with scepticism shaping engagement.</li><li>Emotional appeals increased engagement by up to 20%.</li></ul><div style="margin-top:34px"><p class="eyebrow">The design</p><div class="diagram" role="table" aria-label="Experiment design"><div class="diagram__r" role="row"><div class="h" role="columnheader"></div><div class="h" role="columnheader">Emotional appeal</div><div class="h" role="columnheader">Rational appeal</div></div><div class="diagram__r" role="row"><div class="h" role="rowheader">Local NGO</div><div role="cell">Group A</div><div role="cell">Group B</div></div><div class="diagram__r" role="row"><div class="h" role="rowheader">Global NGO</div><div role="cell">Group C</div><div role="cell">Group D</div></div></div></div></div></div>
 <nav class="page__next" aria-label="More"><button type="button" class="page__back" data-close><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg> Back to the portfolio</button><a href="#infosys-systems-engineer"><small>Next</small><b>Infosys</b></a></nav></div></div></article>
 <article class="page" data-page="infosys-systems-engineer" data-lenis-prevent aria-labelledby="pg-infosys-systems-engineer">
 <div class="page__bar"><button type="button" class="page__back" data-close><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg> Back to the portfolio</button><span class="page__crumb">Experience · Infosys</span></div>
@@ -2865,7 +2874,7 @@ if(jp&&!RM){
   var embedded=false;try{embedded=window.self!==window.top}catch(e){embedded=true}
   var box=document.createElement("div");box.className="cview";box.hidden=true;
   box.setAttribute("role","dialog");box.setAttribute("aria-modal","true");box.setAttribute("aria-label","Document preview");box.setAttribute("data-lenis-prevent","");
-  box.innerHTML='<div class="cview__in"><div class="cview__bar"><span class="cview__t"></span><span class="cview__note">Preview &middot; the PDF opens and downloads on the live site</span><a class="cview__open" target="_blank" rel="noopener" hidden></a><button type="button" class="cview__x">Close</button></div><div class="cview__pages" data-lenis-prevent></div></div>';
+  box.innerHTML='<div class="cview__in"><div class="cview__bar"><span class="cview__t"></span><span class="cview__note">Preview &middot; the PDF opens and downloads on the live site</span><a class="cview__open" href="#certs" target="_blank" rel="noopener" hidden></a><button type="button" class="cview__x">Close</button></div><div class="cview__pages" data-lenis-prevent></div></div>';
   document.body.appendChild(box);
   var t=box.querySelector(".cview__t"),o=box.querySelector(".cview__open"),pages=box.querySelector(".cview__pages"),x=box.querySelector(".cview__x"),last=null;
   function open(a){

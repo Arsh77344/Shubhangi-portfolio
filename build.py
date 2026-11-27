@@ -37,9 +37,9 @@ def page_html(p):
     body='<ul class="page__list">'+''.join(f'<li>{d}</li>' for d in p['did'])+'</ul>'
     if p.get('diagram'):
         body+=('<div style="margin-top:34px"><p class="eyebrow">The design</p><div class="diagram" role="table" aria-label="Experiment design">'
-               '<div class="h" role="columnheader"></div><div class="h" role="columnheader">Emotional appeal</div><div class="h" role="columnheader">Rational appeal</div>'
-               '<div class="h" role="rowheader">Local NGO</div><div role="cell">Group A</div><div role="cell">Group B</div>'
-               '<div class="h" role="rowheader">Global NGO</div><div role="cell">Group C</div><div role="cell">Group D</div></div></div>')
+               '<div class="diagram__r" role="row"><div class="h" role="columnheader"></div><div class="h" role="columnheader">Emotional appeal</div><div class="h" role="columnheader">Rational appeal</div></div>'
+               '<div class="diagram__r" role="row"><div class="h" role="rowheader">Local NGO</div><div role="cell">Group A</div><div role="cell">Group B</div></div>'
+               '<div class="diagram__r" role="row"><div class="h" role="rowheader">Global NGO</div><div role="cell">Group C</div><div role="cell">Group D</div></div></div></div>')
     if p.get('clients'): o.append(f'<p class="page__clients"><span>Clients</span>{p["clients"]}</p>')
     o.append(f'<div class="page__cols"><h2>What I did</h2><div>{body}</div></div>')
     if p['gallery']:

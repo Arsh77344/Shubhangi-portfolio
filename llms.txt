@@ -1,0 +1,25 @@
+# Shubhangi Gupta
+
+> Portfolio of Shubhangi Gupta, Recruitment Manager for South Asia at Luminate
+> Education Group. Eight years across India and the UK in international growth,
+> sales, partnerships and client engagement.
+
+The whole portfolio is one page. The links below are anchors on it. Each role in
+the experience section opens a detail panel in place rather than a new URL, so
+the full text of every role is already in the page source.
+
+## Sections
+
+- [Home](https://shubhangigupta.com/): the portfolio, in full, on one page
+- [Journey](https://shubhangigupta.com/#journey): six cities, Lucknow to Leeds and back
+- [Experience](https://shubhangigupta.com/#experience): Luminate Education Group and Infosys
+- [Education](https://shubhangigupta.com/#education): MSc at the University of Leeds, B.Tech at SRM Institute
+- [Skills](https://shubhangigupta.com/#skills): market entry, partnerships, delivery
+- [Beyond work](https://shubhangigupta.com/#beyond): Robin Hood Army and independent projects
+- [Contact](https://shubhangigupta.com/#contact): email and LinkedIn
+
+## Notes
+
+- All content is present in the HTML at load. Nothing meaningful is fetched afterwards.
+- Person data is published as schema.org/Person JSON-LD in the document head.
+- Contact: guptashubhangi.work@gmail.com

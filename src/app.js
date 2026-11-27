@@ -730,7 +730,7 @@ if(jp&&!RM){
   var embedded=false;try{embedded=window.self!==window.top}catch(e){embedded=true}
   var box=document.createElement("div");box.className="cview";box.hidden=true;
   box.setAttribute("role","dialog");box.setAttribute("aria-modal","true");box.setAttribute("aria-label","Document preview");box.setAttribute("data-lenis-prevent","");
-  box.innerHTML='<div class="cview__in"><div class="cview__bar"><span class="cview__t"></span><span class="cview__note">Preview &middot; the PDF opens and downloads on the live site</span><a class="cview__open" target="_blank" rel="noopener" hidden></a><button type="button" class="cview__x">Close</button></div><div class="cview__pages" data-lenis-prevent></div></div>';
+  box.innerHTML='<div class="cview__in"><div class="cview__bar"><span class="cview__t"></span><span class="cview__note">Preview &middot; the PDF opens and downloads on the live site</span><a class="cview__open" href="#certs" target="_blank" rel="noopener" hidden></a><button type="button" class="cview__x">Close</button></div><div class="cview__pages" data-lenis-prevent></div></div>';
   document.body.appendChild(box);
   var t=box.querySelector(".cview__t"),o=box.querySelector(".cview__open"),pages=box.querySelector(".cview__pages"),x=box.querySelector(".cview__x"),last=null;
   function open(a){

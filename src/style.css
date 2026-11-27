@@ -9,7 +9,7 @@
   --olive:#5B6B3A;
   --ink:#2A1C1F;
   --ink-soft:rgba(42,28,31,.7);
-  --ink-faint:rgba(42,28,31,.5);
+  --ink-faint:rgba(42,28,31,.66);   /* .5 gave 3.2:1 on paper, under the 4.5:1 floor */
   --rule:rgba(92,18,48,.14);
   --rule-strong:rgba(92,18,48,.28);
   --on-wine:#F7EFE3;
@@ -199,7 +199,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 .board{background:var(--wine-deep);color:#F2D9A9;padding:16px 18px 14px;box-shadow:0 30px 60px -30px rgba(58,10,28,.55)}
 .board__head{display:flex;justify-content:space-between;font-size:.72rem;font-weight:700;color:rgba(242,217,169,.6);margin-bottom:10px;letter-spacing:.06em}
 .board__row{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:6px}
-.board__lbl{font-size:.7rem;font-weight:600;color:rgba(242,217,169,.55);width:62px}
+.board__lbl{font-size:.7rem;font-weight:600;color:rgba(242,217,169,.72);width:62px}
 .flaps{display:flex;gap:3px}
 .flap{position:relative;width:1.18em;height:1.6em;background:#24060F;color:#F2D9A9;font-family:"Manrope",ui-monospace,monospace;font-weight:700;font-size:clamp(.9rem,1.25vw,1.15rem);display:grid;place-items:center;border-radius:2px;overflow:hidden}
 .flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.6)}
@@ -357,8 +357,17 @@ p{margin:0 0 1.1em;max-width:64ch}
 .chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0 0 26px;padding:0}
 .chips li{font-size:.84rem;font-weight:600;padding:6px 12px;border:1px solid var(--rule-strong);color:var(--wine)}
 .edu__card .more{margin-top:auto;align-self:flex-start}
-.diagram{display:grid;grid-template-columns:auto 1fr 1fr;gap:5px;font-size:.84rem;margin:4px 0 26px;max-width:440px}
-.diagram div{padding:12px;background:var(--paper)}
+/* role="table" requires its cells to sit inside role="row"; they were direct
+   children, which left the accessibility tree malformed for anything reading
+   the page without eyes. The rows are real elements now, and subgrid keeps
+   the columns lined up across them. */
+.diagram{display:grid;gap:5px;font-size:.84rem;margin:4px 0 26px;max-width:440px}
+.diagram__r{display:grid;grid-template-columns:.92fr 1fr 1fr;gap:5px}
+@supports (grid-template-columns:subgrid){
+  .diagram{grid-template-columns:auto 1fr 1fr}
+  .diagram__r{grid-column:1/-1;grid-template-columns:subgrid}
+}
+.diagram__r>div{padding:12px;background:var(--paper)}
 .diagram .h{background:transparent;font-weight:700;color:var(--wine);padding:6px 8px}
 
 /* skills */
