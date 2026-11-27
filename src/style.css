@@ -30,10 +30,14 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:inherit}
 html,body{margin:0;max-width:100%}
-body{background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-anchor:none}
 body.is-locked{overflow:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ivory);pointer-events:none}
-img{max-width:100%;display:block}
+/* height:auto is what lets the width and height attributes act as an aspect
+   ratio rather than a literal height. Without it the attributes stretch every
+   picture; with it they reserve exactly the right space before the file
+   arrives, which is what stops the page moving under the reader. */
+img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0;text-align:inherit}
 :focus-visible{outline:2px solid var(--wine);outline-offset:3px}
@@ -113,7 +117,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 
 /* hero: cinematic tilt */
 .hero{position:relative;height:240vh;background:#9DBCDD}
-.hero__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
+.hero__stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
 .hero__img{position:absolute;left:0;top:0;width:100%;max-width:none;height:auto;will-change:transform;transform-origin:50% 0}
 .hero__shade{display:none}
 .hero__title{position:absolute;left:0;right:0;top:50%;transform:translateY(-58%);text-align:center;color:#FBF8F2;z-index:2;padding:0 var(--gutter)}
@@ -192,7 +196,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 
 /* journey */
 .journey{position:relative;height:540vh;background:var(--paper)}
-.journey__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
+.journey__stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
 .journey__canvas{position:absolute;inset:0;width:100%;height:100%}
 .journey__panel{position:absolute;left:var(--gutter);top:50%;transform:translateY(-50%);z-index:2;width:min(500px,40vw)}
 .journey__panel h2{margin-bottom:28px}
@@ -375,8 +379,8 @@ p{margin:0 0 1.1em;max-width:64ch}
 .sphere{position:relative;aspect-ratio:1;width:100%;max-width:580px;margin-left:auto;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .sphere:active{cursor:grabbing}
 .sphere__ring{position:absolute;inset:7%;border-radius:50%;border:1px dashed var(--rule-strong);pointer-events:none}
-.sphere__tag{position:absolute;left:50%;top:50%;white-space:nowrap;will-change:transform,opacity;color:var(--ink);font-size:clamp(.6rem,2.3vw,.95rem);font-weight:600}
-.sphere__tag.is-main{font-family:var(--display);font-weight:420;font-size:clamp(.98rem,3.9vw,1.65rem);color:var(--wine)}
+.sphere__tag{position:absolute;left:50%;top:50%;white-space:nowrap;will-change:transform,opacity;color:var(--ink);font-size:clamp(.74rem,2.6vw,.95rem);font-weight:600}
+.sphere__tag.is-main{font-family:var(--display);font-weight:420;font-size:clamp(.95rem,3.7vw,1.65rem);color:var(--wine)}
 .sphere__hint{text-align:right;font-size:.82rem;color:var(--ink-faint);margin-top:6px}
 .skillcards{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);list-style:none;margin:0 0 clamp(70px,8vw,110px);padding:0}
 .skillcards li{background:var(--ivory);padding:30px 26px;min-height:250px;display:flex;flex-direction:column;transition:background .4s,color .4s}
@@ -1116,14 +1120,14 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 
 /* --- bucket list: the paper tears open onto Barcelona --- */
 .spain{position:relative;height:240vh;background:var(--paper)}
-.spain__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
+.spain__stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
   display:grid;place-items:center;padding:var(--gutter) 0}
 .spain__inner{width:min(94vw,1160px);margin:0 auto;display:grid;
   grid-template-columns:minmax(0,1fr) minmax(0,.74fr);
   align-items:center;gap:clamp(18px,3.4vw,56px)}
 .spain__art{margin:0;justify-self:end;width:100%;max-width:620px}
 .spain__svg{display:block;width:100%;height:auto;aspect-ratio:860/1154;
-  max-height:84vh;max-height:84dvh;margin-inline:auto}
+  max-height:84vh;max-height:84svh;margin-inline:auto}
 .spain__copy{max-width:35ch}
 .spain__copy .eyebrow{margin-bottom:14px}
 .spain h2{margin:0 0 16px;line-height:.98}
@@ -1139,19 +1143,19 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .spain__inner{width:min(94vw,560px);grid-template-columns:1fr;gap:clamp(14px,3vw,26px);
     justify-items:start}
   .spain__art{justify-self:center;max-width:none;width:min(100%,420px)}
-  .spain__svg{max-height:52vh;max-height:52dvh}
+  .spain__svg{max-height:52vh;max-height:52svh}
   .spain__copy{max-width:40ch}
   .spain__note{font-size:.95rem}
   .spain__kick{margin-top:18px}
 }
 @media (max-width:600px){
   .spain{height:225vh}
-  .spain__svg{max-height:46vh;max-height:46dvh}
+  .spain__svg{max-height:46vh;max-height:46svh}
   .spain__note{font-size:.9rem}
   .spain__kick{font-size:.66rem;letter-spacing:.13em;margin-top:14px}
   .spain__kick span{flex-basis:22px}
 }
-@media (max-width:420px){.spain__svg{max-height:42vh;max-height:42dvh}}
+@media (max-width:420px){.spain__svg{max-height:42vh;max-height:42svh}}
 @media (prefers-reduced-motion:reduce){
   .spain{height:auto}
   .spain__stage{position:relative;height:auto;padding:var(--sec) var(--gutter)}

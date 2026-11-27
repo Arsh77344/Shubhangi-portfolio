@@ -393,8 +393,11 @@
              preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="spainSvgT">
           <title id="spainSvgT">An illustration of the Sagrada Familia at night, a trail of trees spilling down from it to a small figure standing alone at the lower right</title>
           <defs>
-            <linearGradient id="spainReveal" gradientUnits="objectBoundingBox"
-                            x1="0.797" y1="0.905" x2="0.288" y2="0.027">
+            <!-- user space, not the filtered rect's bounding box: the box is
+                 ambiguous once a filter is in the chain and some engines give
+                 up and drop the mask, which shows the picture all at once -->
+            <linearGradient id="spainReveal" gradientUnits="userSpaceOnUse"
+                            x1="780" y1="1180" x2="180" y2="-120">
               <stop id="spainStopA" offset="0" stop-color="#fff"/>
               <stop id="spainStopM" offset="0.0003" stop-color="#D2D2D2"/>
               <stop id="spainStopB" offset="0.0006" stop-color="#000"/>
@@ -413,7 +416,7 @@
               <feGaussianBlur stdDeviation="1.1"/>
             </filter>
             <mask id="spainMask">
-              <rect x="-160" y="-160" width="1180" height="1480" fill="url(#spainReveal)" filter="url(#spainRough)"/>
+              <rect id="spainMaskRect" x="-160" y="-160" width="1180" height="1480" fill="url(#spainReveal)" filter="url(#spainRough)"/>
             </mask>
           </defs>
           <g id="spainArtG" mask="url(#spainMask)">

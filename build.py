@@ -49,6 +49,62 @@ def page_html(p):
     return '\n'.join(o)
 USED=set()
 import hashlib, shutil
+
+def webp_size(path):
+    """Width and height of a WebP, with nothing but the standard library.
+
+    Every <img> needs these on the tag. Without them a lazily loaded picture
+    occupies no space until it arrives, the page grows under the reader, and
+    the browser's scroll anchoring quietly moves the scroll position to
+    compensate -- which is felt as the page refusing to stop where you
+    stopped it."""
+    with open(path, 'rb') as f:
+        b = f.read(40)
+    if b[:4] != b'RIFF' or b[8:12] != b'WEBP':
+        return None
+    tag = b[12:16]
+    if tag == b'VP8X':
+        w = int.from_bytes(b[24:27], 'little') + 1
+        h = int.from_bytes(b[27:30], 'little') + 1
+        return w, h
+    if tag == b'VP8 ':
+        if b[23:26] != b'\x9d\x01\x2a':
+            return None
+        w = int.from_bytes(b[26:28], 'little') & 0x3fff
+        h = int.from_bytes(b[28:30], 'little') & 0x3fff
+        return w, h
+    if tag == b'VP8L':
+        if b[20] != 0x2f:
+            return None
+        n = int.from_bytes(b[21:25], 'little')
+        return (n & 0x3fff) + 1, ((n >> 14) & 0x3fff) + 1
+    return None
+
+SIZES = {}
+def img_size(name):
+    if name not in SIZES:
+        SIZES[name] = webp_size(os.path.join(SRC, 'images', name + '.webp'))
+    return SIZES[name]
+
+def add_dimensions(html):
+    """Puts width and height on every <img> that does not carry them."""
+    def fix(m):
+        tag = m.group(0)
+        if 'width=' in tag:
+            return tag
+        key = None
+        for pat in (r'data-key="(\w+)"', r'data-img="(\w+)"', r'src="assets/(\w+)\.webp'):
+            k = re.search(pat, tag)
+            if k:
+                key = k.group(1); break
+        if not key:
+            return tag
+        wh = img_size(key)
+        if not wh:
+            return tag
+        return tag[:-1].rstrip() + f' width="{wh[0]}" height="{wh[1]}">'
+    return re.sub(r'<img\b[^>]*>', fix, html)
+
 ASSETS = os.path.join(ROOT, 'assets')
 def b64(n):
     """Returns the served path of an image, not its bytes.
@@ -99,6 +155,7 @@ tail='''
 </body>
 </html>
 '''
+body=add_dimensions(body)
 out=head+body+tail
 with open(os.path.join(ROOT,'index.html'),'w',encoding='utf-8') as f: f.write(out)
 

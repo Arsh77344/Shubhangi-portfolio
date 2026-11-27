@@ -5,7 +5,13 @@ root.classList.remove("no-js");
 var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
 if(RM) root.classList.add("reduced");
 var hasG=typeof window.gsap!=="undefined";
-var FINE=window.matchMedia&&matchMedia("(hover:hover) and (pointer:fine)").matches;
+/* A touch screen must never be handed to the smooth-scroll library: it
+   lerps toward a target, so the page keeps gliding after the finger lifts
+   and settles somewhere the reader did not choose. Some phones report
+   hover:hover, so the touch test is the one that decides. */
+var COARSE=!!(window.matchMedia&&matchMedia("(pointer:coarse)").matches)||
+           (navigator.maxTouchPoints||0)>0||"ontouchstart" in window;
+var FINE=!COARSE&&!!(window.matchMedia&&matchMedia("(hover:hover) and (pointer:fine)").matches);
 var $=function(s,c){return (c||document).querySelector(s)};
 var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
 var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
@@ -129,7 +135,9 @@ function finishLoader(){
   function upd(){
     var y=window.scrollY,hb=hero.offsetHeight-80;
     hdr.classList.toggle("is-solid",y>hb);
-    hdr.classList.toggle("is-hidden",y>hb+400&&y>lastY+2&&!document.body.classList.contains("is-locked"));
+    // On a phone the menu button lives in this bar, so hiding the bar hides
+    // the only way to jump between sections. It stays put on touch screens.
+    hdr.classList.toggle("is-hidden",!COARSE&&y>hb+400&&y>lastY+2&&!document.body.classList.contains("is-locked"));
     if(y<lastY-2)hdr.classList.remove("is-hidden");
     lastY=y;
     var max=document.documentElement.scrollHeight-vh();
@@ -473,12 +481,16 @@ function __initGlobe(){
   var el=$("#sphere");if(!el)return;
   var main=["Market entry strategy","Strategic partnerships","Stakeholder management","Change management","Storytelling","Project delivery"];
   var more=["Consultative selling","Pipeline building","B2B account management","Partner and channel sales","Negotiation","C-suite engagement","Sales forecasting","Brand positioning","Market research","Audience segmentation","Power BI","Salesforce","HubSpot","Microsoft Dynamics","Sales Navigator","Agile delivery","Procurement","Budget management","Cross-cultural teams","Client onboarding","Volunteer mobilisation","Business writing"];
+  /* 28 labels on a sphere the width of a phone can only be set in type too
+     small to read. A narrow screen gets the six headline skills and half of
+     the rest, which leaves room for them to be legible. */
+  if(window.innerWidth<720) more=more.filter(function(_,i){return i%2===0});
   var tags=[],mi=0,oi=0;
   while(mi<6||oi<more.length){if(mi<6&&tags.length%4===0)tags.push({t:main[mi++],m:1});else if(oi<more.length)tags.push({t:more[oi++],m:0});else tags.push({t:main[mi++],m:1})}
   var N=tags.length,pts=[];
   tags.forEach(function(tg,i){var y=1-(i/(N-1))*2,r=Math.sqrt(1-y*y),th=Math.PI*(3-Math.sqrt(5))*i;var s=document.createElement("span");s.className="sphere__tag"+(tg.m?" is-main":"");s.textContent=tg.t;el.appendChild(s);pts.push({x:Math.cos(th)*r,y:y,z:Math.sin(th)*r,el:s})});
   var ax=0,ay=-0.5,vx=.0012,vy=RM?0:.0052,drag=false,lx=0,ly=0,R=0,inView=false,raf=0;
-  function sz(){R=el.clientWidth*(el.clientWidth<520?.32:.4)}
+  function sz(){R=el.clientWidth*(el.clientWidth<520?.27:.4)}  // room for the longest label at the rim
   var COARSE=window.matchMedia&&matchMedia("(pointer:coarse)").matches,half=0;
   function frame(){
     if(inView)raf=requestAnimationFrame(frame);
@@ -894,7 +906,14 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
   function smooth(t){return t*t*(3-2*t)}
 
   var BAND=0.12, FLOOR=0.196;
-  var artEl=$("#spainArt");
+  var artEl=$("#spainArt"),maskRect=$("#spainMaskRect");
+  /* The torn edge is turbulence displacing the mask, and the mask is redrawn
+     every frame. That is a lot of filtering for a phone, and on some mobile
+     engines the filtered mask is dropped altogether, which shows the whole
+     picture at once with no reveal at all. Touch screens get the plain
+     gradient; the artwork's own edges are already torn. */
+  if(maskRect&&window.matchMedia&&matchMedia("(pointer:coarse)").matches)
+    maskRect.removeAttribute("filter");
   function draw(p){
     // the picture is 250 KB and sits deep in the page: it is not asked for
     // until the section is close enough for this to run at all

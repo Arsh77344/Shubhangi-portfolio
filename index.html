@@ -47,10 +47,14 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:inherit}
 html,body{margin:0;max-width:100%}
-body{background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-anchor:none}
 body.is-locked{overflow:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ivory);pointer-events:none}
-img{max-width:100%;display:block}
+/* height:auto is what lets the width and height attributes act as an aspect
+   ratio rather than a literal height. Without it the attributes stretch every
+   picture; with it they reserve exactly the right space before the file
+   arrives, which is what stops the page moving under the reader. */
+img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0;text-align:inherit}
 :focus-visible{outline:2px solid var(--wine);outline-offset:3px}
@@ -130,7 +134,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 
 /* hero: cinematic tilt */
 .hero{position:relative;height:240vh;background:#9DBCDD}
-.hero__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
+.hero__stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
 .hero__img{position:absolute;left:0;top:0;width:100%;max-width:none;height:auto;will-change:transform;transform-origin:50% 0}
 .hero__shade{display:none}
 .hero__title{position:absolute;left:0;right:0;top:50%;transform:translateY(-58%);text-align:center;color:#FBF8F2;z-index:2;padding:0 var(--gutter)}
@@ -209,7 +213,7 @@ p{margin:0 0 1.1em;max-width:64ch}
 
 /* journey */
 .journey{position:relative;height:540vh;background:var(--paper)}
-.journey__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
+.journey__stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
 .journey__canvas{position:absolute;inset:0;width:100%;height:100%}
 .journey__panel{position:absolute;left:var(--gutter);top:50%;transform:translateY(-50%);z-index:2;width:min(500px,40vw)}
 .journey__panel h2{margin-bottom:28px}
@@ -392,8 +396,8 @@ p{margin:0 0 1.1em;max-width:64ch}
 .sphere{position:relative;aspect-ratio:1;width:100%;max-width:580px;margin-left:auto;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .sphere:active{cursor:grabbing}
 .sphere__ring{position:absolute;inset:7%;border-radius:50%;border:1px dashed var(--rule-strong);pointer-events:none}
-.sphere__tag{position:absolute;left:50%;top:50%;white-space:nowrap;will-change:transform,opacity;color:var(--ink);font-size:clamp(.6rem,2.3vw,.95rem);font-weight:600}
-.sphere__tag.is-main{font-family:var(--display);font-weight:420;font-size:clamp(.98rem,3.9vw,1.65rem);color:var(--wine)}
+.sphere__tag{position:absolute;left:50%;top:50%;white-space:nowrap;will-change:transform,opacity;color:var(--ink);font-size:clamp(.74rem,2.6vw,.95rem);font-weight:600}
+.sphere__tag.is-main{font-family:var(--display);font-weight:420;font-size:clamp(.95rem,3.7vw,1.65rem);color:var(--wine)}
 .sphere__hint{text-align:right;font-size:.82rem;color:var(--ink-faint);margin-top:6px}
 .skillcards{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);list-style:none;margin:0 0 clamp(70px,8vw,110px);padding:0}
 .skillcards li{background:var(--ivory);padding:30px 26px;min-height:250px;display:flex;flex-direction:column;transition:background .4s,color .4s}
@@ -1133,14 +1137,14 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 
 /* --- bucket list: the paper tears open onto Barcelona --- */
 .spain{position:relative;height:240vh;background:var(--paper)}
-.spain__stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
+.spain__stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
   display:grid;place-items:center;padding:var(--gutter) 0}
 .spain__inner{width:min(94vw,1160px);margin:0 auto;display:grid;
   grid-template-columns:minmax(0,1fr) minmax(0,.74fr);
   align-items:center;gap:clamp(18px,3.4vw,56px)}
 .spain__art{margin:0;justify-self:end;width:100%;max-width:620px}
 .spain__svg{display:block;width:100%;height:auto;aspect-ratio:860/1154;
-  max-height:84vh;max-height:84dvh;margin-inline:auto}
+  max-height:84vh;max-height:84svh;margin-inline:auto}
 .spain__copy{max-width:35ch}
 .spain__copy .eyebrow{margin-bottom:14px}
 .spain h2{margin:0 0 16px;line-height:.98}
@@ -1156,19 +1160,19 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   .spain__inner{width:min(94vw,560px);grid-template-columns:1fr;gap:clamp(14px,3vw,26px);
     justify-items:start}
   .spain__art{justify-self:center;max-width:none;width:min(100%,420px)}
-  .spain__svg{max-height:52vh;max-height:52dvh}
+  .spain__svg{max-height:52vh;max-height:52svh}
   .spain__copy{max-width:40ch}
   .spain__note{font-size:.95rem}
   .spain__kick{margin-top:18px}
 }
 @media (max-width:600px){
   .spain{height:225vh}
-  .spain__svg{max-height:46vh;max-height:46dvh}
+  .spain__svg{max-height:46vh;max-height:46svh}
   .spain__note{font-size:.9rem}
   .spain__kick{font-size:.66rem;letter-spacing:.13em;margin-top:14px}
   .spain__kick span{flex-basis:22px}
 }
-@media (max-width:420px){.spain__svg{max-height:42vh;max-height:42dvh}}
+@media (max-width:420px){.spain__svg{max-height:42vh;max-height:42svh}}
 @media (prefers-reduced-motion:reduce){
   .spain{height:auto}
   .spain__stage{position:relative;height:auto;padding:var(--sec) var(--gutter)}
@@ -1238,7 +1242,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 <!-- HERO: cinematic tilt from sky to summit -->
 <section class="hero" id="hero" aria-label="Introduction">
   <div class="hero__stage">
-    <img class="hero__img" id="heroImg" src="assets/hero_wide.webp?v=b8accb12" data-key="hero_wide" alt="Shubhangi standing on a mountain summit above a bay, arms held wide" fetchpriority="high">
+    <img class="hero__img" id="heroImg" src="assets/hero_wide.webp?v=b8accb12" data-key="hero_wide" alt="Shubhangi standing on a mountain summit above a bay, arms held wide" fetchpriority="high" width="1600" height="3372">
     <div class="hero__shade"></div>
     <div class="hero__title" id="heroTitle">
       <p class="hero__kick" data-hero>Sales, partnerships and client engagement</p>
@@ -1414,10 +1418,10 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
         <div class="reel__btns"><button type="button" data-reel="-1" aria-label="Previous photos"><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg></button><button type="button" data-reel="1" aria-label="Next photos"><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></button></div>
       </div>
       <div class="reel" id="reel" data-cursor="Drag">
-        <figure><img src="assets/stall.webp?v=298b3111" data-key="stall" alt="Shubhangi talking with prospective students at a Leeds Conservatoire stand" loading="lazy"><figcaption>Leeds Conservatoire stand</figcaption></figure>
-        <figure><img src="assets/hellostudy.webp?v=d81bee20" data-key="hellostudy" alt="Shubhangi with a recruitment partner at an education fair" loading="lazy"><figcaption>With a recruitment partner</figcaption></figure>
-        <figure><img src="assets/badge.webp?v=8f713427" data-key="badge" alt="Delegate badge for ST Alphe UK 2025 beside University Centre Leeds and Leeds Conservatoire flyers" loading="lazy"><figcaption>ST Alphe UK 2025</figcaption></figure>
-        <figure><img src="assets/delegation.webp?v=afa9661a" data-key="delegation" alt="Education partners at a University Centre Leeds event" loading="lazy"><figcaption>University Centre Leeds partner event</figcaption></figure>
+        <figure><img src="assets/stall.webp?v=298b3111" data-key="stall" alt="Shubhangi talking with prospective students at a Leeds Conservatoire stand" loading="lazy" width="1000" height="875"><figcaption>Leeds Conservatoire stand</figcaption></figure>
+        <figure><img src="assets/hellostudy.webp?v=d81bee20" data-key="hellostudy" alt="Shubhangi with a recruitment partner at an education fair" loading="lazy" width="820" height="1093"><figcaption>With a recruitment partner</figcaption></figure>
+        <figure><img src="assets/badge.webp?v=8f713427" data-key="badge" alt="Delegate badge for ST Alphe UK 2025 beside University Centre Leeds and Leeds Conservatoire flyers" loading="lazy" width="900" height="1200"><figcaption>ST Alphe UK 2025</figcaption></figure>
+        <figure><img src="assets/delegation.webp?v=afa9661a" data-key="delegation" alt="Education partners at a University Centre Leeds event" loading="lazy" width="1000" height="719"><figcaption>University Centre Leeds partner event</figcaption></figure>
       </div>
     </div>
 
@@ -1452,7 +1456,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
         </li>
       </ol>
       <figure class="org__shot" data-rise>
-        <div class="reveal" data-reveal><img src="assets/infosys_xpo.webp?v=406c4da5" data-key="infosys_xpo" alt="Shubhangi presenting from an Infosys podium, an XPO Logistics banner behind her" loading="lazy"></div>
+        <div class="reveal" data-reveal><img src="assets/infosys_xpo.webp?v=406c4da5" data-key="infosys_xpo" alt="Shubhangi presenting from an Infosys podium, an XPO Logistics banner behind her" loading="lazy" width="1100" height="733"></div>
         <figcaption>Presenting at Infosys, on the XPO Logistics account</figcaption>
       </figure>
       <ul class="proofs" style="padding-bottom:var(--sec)">
@@ -1744,8 +1748,11 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
              preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="spainSvgT">
           <title id="spainSvgT">An illustration of the Sagrada Familia at night, a trail of trees spilling down from it to a small figure standing alone at the lower right</title>
           <defs>
-            <linearGradient id="spainReveal" gradientUnits="objectBoundingBox"
-                            x1="0.797" y1="0.905" x2="0.288" y2="0.027">
+            <!-- user space, not the filtered rect's bounding box: the box is
+                 ambiguous once a filter is in the chain and some engines give
+                 up and drop the mask, which shows the picture all at once -->
+            <linearGradient id="spainReveal" gradientUnits="userSpaceOnUse"
+                            x1="780" y1="1180" x2="180" y2="-120">
               <stop id="spainStopA" offset="0" stop-color="#fff"/>
               <stop id="spainStopM" offset="0.0003" stop-color="#D2D2D2"/>
               <stop id="spainStopB" offset="0.0006" stop-color="#000"/>
@@ -1764,7 +1771,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
               <feGaussianBlur stdDeviation="1.1"/>
             </filter>
             <mask id="spainMask">
-              <rect x="-160" y="-160" width="1180" height="1480" fill="url(#spainReveal)" filter="url(#spainRough)"/>
+              <rect id="spainMaskRect" x="-160" y="-160" width="1180" height="1480" fill="url(#spainReveal)" filter="url(#spainRough)"/>
             </mask>
           </defs>
           <g id="spainArtG" mask="url(#spainMask)">
@@ -1803,10 +1810,10 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
     </div>
     <div class="feature">
       <div class="collage">
-        <figure class="c1 reveal" data-reveal><img src="assets/rhateam.webp?v=d4e9269c" data-key="rhateam" alt="Robin Hood Army volunteers in green shirts posing as a group" loading="lazy"></figure>
-        <figure class="c2 reveal" data-reveal><img src="assets/feeding.webp?v=12cfc390" data-key="feeding" alt="Shubhangi feeding a child at a food drive" loading="lazy"></figure>
-        <figure class="c3 reveal" data-reveal><img src="assets/vaccine.webp?v=be6737c1" data-key="vaccine" alt="Shubhangi in a mask and gloves at a vaccination camp registration desk" loading="lazy"></figure>
-        <figure class="c4 reveal" data-reveal><img src="assets/rhacert.webp?v=2cc76c63" data-key="rhacert" alt="Robin Hood Army volunteers holding certificates at an outdoor event" loading="lazy"></figure>
+        <figure class="c1 reveal" data-reveal><img src="assets/rhateam.webp?v=d4e9269c" data-key="rhateam" alt="Robin Hood Army volunteers in green shirts posing as a group" loading="lazy" width="1000" height="452"></figure>
+        <figure class="c2 reveal" data-reveal><img src="assets/feeding.webp?v=12cfc390" data-key="feeding" alt="Shubhangi feeding a child at a food drive" loading="lazy" width="900" height="1200"></figure>
+        <figure class="c3 reveal" data-reveal><img src="assets/vaccine.webp?v=be6737c1" data-key="vaccine" alt="Shubhangi in a mask and gloves at a vaccination camp registration desk" loading="lazy" width="1200" height="801"></figure>
+        <figure class="c4 reveal" data-reveal><img src="assets/rhacert.webp?v=2cc76c63" data-key="rhacert" alt="Robin Hood Army volunteers holding certificates at an outdoor event" loading="lazy" width="1000" height="750"></figure>
       </div>
       <div>
         <p class="eyebrow" data-rise><a class="olink" href="https://robinhoodarmy.com" target="_blank" rel="noopener">Robin Hood Army<svg class="ext" width="11" height="11" viewBox="0 0 11 11" aria-hidden="true"><path d="M3 1h7v7M10 1 1 10" fill="none" stroke="currentColor"/></svg><span class="sr">, opens in a new tab</span></a>, Lucknow · 2021 to 2022</p>
@@ -1828,7 +1835,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
     </div>
     <div class="favour">
       <figure class="favour__logo" data-rise>
-        <img src="assets/kaaash_logo.webp?v=d53ac71a" data-key="kaaash_logo" alt="The Kaaash Impression logo: the name drawn in Devanagari brush lettering above the word Impression" loading="lazy">
+        <img src="assets/kaaash_logo.webp?v=d53ac71a" data-key="kaaash_logo" alt="The Kaaash Impression logo: the name drawn in Devanagari brush lettering above the word Impression" loading="lazy" width="880" height="662">
       </figure>
       <div class="favour__text">
         <p class="eyebrow" data-rise>A favour, and a logo</p>
@@ -1837,7 +1844,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
         <p class="soft" data-rise>No brief and no fee. It is still the piece of design I am happiest with, and a reminder that I draw and paint when nobody is paying me to.</p>
       </div>
       <figure class="favour__shot" data-rise>
-        <div class="reveal" data-reveal><img src="assets/kaaash_stall.webp?v=65875e0b" data-key="kaaash_stall" alt="Shubhangi with two friends at the Kaaash stall, framed hand castings on the table" loading="lazy"></div>
+        <div class="reveal" data-reveal><img src="assets/kaaash_stall.webp?v=65875e0b" data-key="kaaash_stall" alt="Shubhangi with two friends at the Kaaash stall, framed hand castings on the table" loading="lazy" width="880" height="995"></div>
         <figcaption>At the Kaaash stall</figcaption>
       </figure>
     </div>
@@ -1851,13 +1858,13 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
   </div>
   <div class="wrap">
     <div class="wall">
-      <figure data-rise><img data-img="delegation" alt="Education partners at a University Centre Leeds event" loading="lazy"><figcaption>Partner event, University Centre Leeds</figcaption></figure>
-      <figure data-rise><img data-img="hellostudy" loading="lazy" decoding="async" alt="Shubhangi with a recruitment partner at an education fair" loading="lazy"><figcaption>With a recruitment partner</figcaption></figure>
-      <figure data-rise><img data-img="rhacert" alt="Robin Hood Army volunteers holding certificates" loading="lazy"><figcaption>Robin Hood Army volunteers</figcaption></figure>
-      <figure data-rise><img data-img="badge" alt="ST Alphe UK 2025 delegate badge" loading="lazy"><figcaption>ST Alphe UK 2025</figcaption></figure>
-      <figure data-rise><img data-img="infosys_xpo" alt="Shubhangi presenting from an Infosys podium" loading="lazy"><figcaption>Presenting at Infosys</figcaption></figure>
-      <figure data-rise><img data-img="vaccine" alt="Shubhangi at a vaccination camp" loading="lazy"><figcaption>Vaccination camp, Lucknow</figcaption></figure>
-      <figure data-rise><img data-img="stall" loading="lazy" decoding="async" alt="Leeds Conservatoire stand" loading="lazy"><figcaption>Leeds Conservatoire</figcaption></figure>
+      <figure data-rise><img data-img="delegation" alt="Education partners at a University Centre Leeds event" loading="lazy" width="1000" height="719"><figcaption>Partner event, University Centre Leeds</figcaption></figure>
+      <figure data-rise><img data-img="hellostudy" loading="lazy" decoding="async" alt="Shubhangi with a recruitment partner at an education fair" loading="lazy" width="820" height="1093"><figcaption>With a recruitment partner</figcaption></figure>
+      <figure data-rise><img data-img="rhacert" alt="Robin Hood Army volunteers holding certificates" loading="lazy" width="1000" height="750"><figcaption>Robin Hood Army volunteers</figcaption></figure>
+      <figure data-rise><img data-img="badge" alt="ST Alphe UK 2025 delegate badge" loading="lazy" width="900" height="1200"><figcaption>ST Alphe UK 2025</figcaption></figure>
+      <figure data-rise><img data-img="infosys_xpo" alt="Shubhangi presenting from an Infosys podium" loading="lazy" width="1100" height="733"><figcaption>Presenting at Infosys</figcaption></figure>
+      <figure data-rise><img data-img="vaccine" alt="Shubhangi at a vaccination camp" loading="lazy" width="1200" height="801"><figcaption>Vaccination camp, Lucknow</figcaption></figure>
+      <figure data-rise><img data-img="stall" loading="lazy" decoding="async" alt="Leeds Conservatoire stand" loading="lazy" width="1000" height="875"><figcaption>Leeds Conservatoire</figcaption></figure>
     </div>
   </div>
 </section>
@@ -1889,9 +1896,9 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
       <p class="soft" data-rise data-more>Short pieces on partnerships, new markets and the people who make them work. These are early drafts.</p>
     </div>
     <ol class="jteaser__list">
-      <li class="jt" data-rise><a href="#journal-partnerships"><span class="jt__img jt__img--art"><img src="assets/ren_left.webp?v=839cda26" data-key="ren_left" alt="" loading="lazy"></span><span class="jt__meta">Draft, 2 min read</span><h3>Relationships come before routes to market</h3><p>Why the strongest international partnerships are built on trust long before they are built on strategy.</p><span class="jt__go">Open the file <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></span></a></li>
-      <li class="jt" data-rise><a href="#journal-markets"><span class="jt__img jt__img--photo"><img src="assets/cave.webp?v=1c4803bd" data-key="cave" alt="" loading="lazy"></span><span class="jt__meta">Draft, 2 min read</span><h3>What moving across markets teaches you about people</h3><p>Notes on culture, communication and business from a career that has crossed cities and countries.</p><span class="jt__go">Open the file <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></span></a></li>
-      <li class="jt" data-rise><a href="#journal-opportunities"><span class="jt__img jt__img--art"><img src="assets/ren_arch.webp?v=292550b6" data-key="ren_arch" alt="" loading="lazy"></span><span class="jt__meta">Draft, 2 min read</span><h3>The art of creating opportunities where none existed</h3><p>On building something new inside an organisation: a network, a process, or a market that was not there before.</p><span class="jt__go">Open the file <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></span></a></li>
+      <li class="jt" data-rise><a href="#journal-partnerships"><span class="jt__img jt__img--art"><img src="assets/ren_left.webp?v=839cda26" data-key="ren_left" alt="" loading="lazy" width="778" height="900"></span><span class="jt__meta">Draft, 2 min read</span><h3>Relationships come before routes to market</h3><p>Why the strongest international partnerships are built on trust long before they are built on strategy.</p><span class="jt__go">Open the file <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></span></a></li>
+      <li class="jt" data-rise><a href="#journal-markets"><span class="jt__img jt__img--photo"><img src="assets/cave.webp?v=1c4803bd" data-key="cave" alt="" loading="lazy" width="1200" height="900"></span><span class="jt__meta">Draft, 2 min read</span><h3>What moving across markets teaches you about people</h3><p>Notes on culture, communication and business from a career that has crossed cities and countries.</p><span class="jt__go">Open the file <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></span></a></li>
+      <li class="jt" data-rise><a href="#journal-opportunities"><span class="jt__img jt__img--art"><img src="assets/ren_arch.webp?v=292550b6" data-key="ren_arch" alt="" loading="lazy" width="669" height="900"></span><span class="jt__meta">Draft, 2 min read</span><h3>The art of creating opportunities where none existed</h3><p>On building something new inside an organisation: a network, a process, or a market that was not there before.</p><span class="jt__go">Open the file <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></span></a></li>
     </ol>
     <a class="btn" href="#journal" data-rise>Open the journal <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></a>
   </div>
@@ -1956,19 +1963,19 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 <div class="wrap"><ol class="jstack"><li class="jcard" style="--i:0">
   <a class="jcard__in" href="#journal-partnerships">
     <span class="jcard__tab">File 1 of 3</span>
-    <span class="jcard__img jcard__img--art"><img data-img="ren_left" alt="" loading="lazy"></span>
+    <span class="jcard__img jcard__img--art"><img data-img="ren_left" alt="" loading="lazy" width="778" height="900"></span>
     <span class="jcard__text"><span class="jcard__meta">Draft, 2 min read</span><h2>Relationships come before routes to market</h2><p>Why the strongest international partnerships are built on trust long before they are built on strategy.</p><span class="jcard__go">Open the file <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></span></span>
   </a>
 </li><li class="jcard" style="--i:1">
   <a class="jcard__in" href="#journal-markets">
     <span class="jcard__tab">File 2 of 3</span>
-    <span class="jcard__img jcard__img--photo"><img data-img="cave" alt="" loading="lazy"></span>
+    <span class="jcard__img jcard__img--photo"><img data-img="cave" alt="" loading="lazy" width="1200" height="900"></span>
     <span class="jcard__text"><span class="jcard__meta">Draft, 2 min read</span><h2>What moving across markets teaches you about people</h2><p>Notes on culture, communication and business from a career that has crossed cities and countries.</p><span class="jcard__go">Open the file <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></span></span>
   </a>
 </li><li class="jcard" style="--i:2">
   <a class="jcard__in" href="#journal-opportunities">
     <span class="jcard__tab">File 3 of 3</span>
-    <span class="jcard__img jcard__img--art"><img data-img="ren_arch" alt="" loading="lazy"></span>
+    <span class="jcard__img jcard__img--art"><img data-img="ren_arch" alt="" loading="lazy" width="669" height="900"></span>
     <span class="jcard__text"><span class="jcard__meta">Draft, 2 min read</span><h2>The art of creating opportunities where none existed</h2><p>On building something new inside an organisation: a network, a process, or a market that was not there before.</p><span class="jcard__go">Open the file <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5h16M12 1l4 4-4 4" fill="none" stroke="currentColor"/></svg></span></span>
   </a>
 </li></ol>
@@ -1978,7 +1985,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 <div class="page__bar"><a class="page__back" href="#journal"><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg> Back to the archive</a><span class="page__crumb">Journal, file 1 of 3</span></div>
 <div class="sheet">
 <header class="art__head"><p class="art__meta">Draft, 2 min read</p><h1 id="pg-journal-partnerships">Relationships come before routes to market</h1><p class="art__dek">Why the strongest international partnerships are built on trust long before they are built on strategy.</p></header>
-<figure class="art__fig art__fig--art"><img data-img="ren_left" alt="An engraved illustration of classical arches opening onto trees" loading="lazy"></figure>
+<figure class="art__fig art__fig--art"><img data-img="ren_left" alt="An engraved illustration of classical arches opening onto trees" loading="lazy" width="778" height="900"></figure>
 <div class="art__body"><p>Most market entry plans start in the same place: a list of countries, a size for each opportunity, a channel strategy and a timeline. All of that matters. But in partnership work, the plan only comes alive when someone on the other side decides to trust you with their reputation.</p>
 <p>A recruitment agent, a school counsellor or a university partner is not a channel. They are a person whose name is attached to every recommendation they make. When they put a student forward, or put a partner in front of their own network, they are lending you something that took them years to build.</p>
 <h2>Strategy tells you where. Relationships decide whether.</h2>
@@ -2001,7 +2008,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 <div class="page__bar"><a class="page__back" href="#journal"><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg> Back to the archive</a><span class="page__crumb">Journal, file 2 of 3</span></div>
 <div class="sheet">
 <header class="art__head"><p class="art__meta">Draft, 2 min read</p><h1 id="pg-journal-markets">What moving across markets teaches you about people</h1><p class="art__dek">Notes on culture, communication and business from a career that has crossed cities and countries.</p></header>
-<figure class="art__fig art__fig--photo"><img data-img="cave" alt="Looking out from a sea cave towards open water and a clear horizon" loading="lazy"></figure>
+<figure class="art__fig art__fig--photo"><img data-img="cave" alt="Looking out from a sea cave towards open water and a clear horizon" loading="lazy" width="1200" height="900"></figure>
 <div class="art__body"><p>I have lived and worked in Lucknow, Delhi NCR, Pune and Leeds, and my work now connects students and partners across South Asia with institutions in the UK. Each move changed how I think about the people on the other side of a conversation.</p>
 <p>This is not a guide to any one country. It is a set of habits that, I think, travel well.</p>
 <h2>The same word can mean different things</h2>
@@ -2023,7 +2030,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 <div class="page__bar"><a class="page__back" href="#journal"><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg> Back to the archive</a><span class="page__crumb">Journal, file 3 of 3</span></div>
 <div class="sheet">
 <header class="art__head"><p class="art__meta">Draft, 2 min read</p><h1 id="pg-journal-opportunities">The art of creating opportunities where none existed</h1><p class="art__dek">On building something new inside an organisation: a network, a process, or a market that was not there before.</p></header>
-<figure class="art__fig art__fig--art"><img data-img="ren_arch" alt="An engraved illustration of a single classical arch framing open sky" loading="lazy"></figure>
+<figure class="art__fig art__fig--art"><img data-img="ren_arch" alt="An engraved illustration of a single classical arch framing open sky" loading="lazy" width="669" height="900"></figure>
 <div class="art__body"><p>Some roles come with a well-worn path: a territory, a target, a playbook. Others begin with a gap. There is no partner network yet, no process, or no presence in the market. The job is to make the thing that is missing.</p>
 <p>I find the second kind of work the most interesting. It is also the kind that needs the most discipline.</p>
 <h2>Start by describing the gap precisely</h2>
@@ -2058,7 +2065,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 <div class="page__cols"><h2>The story</h2><div><p class="lede">The brief: build international recruitment in markets where we had little or no infrastructure.</p><p class="soft">So I built it from the ground up: a partner network, market entry plans, launch events abroad, and the reporting and procurement systems to keep it all running.</p></div></div>
 <ul class="page__stats"><li><strong>50+</strong><span>partners across South Asia and China</span></li><li><strong>3</strong><span>growth markets: India, Vietnam, China</span></li><li><strong>10+</strong><span>agents converted at events</span></li><li><strong>50%</strong><span>smaller procurement backlog</span></li><li><strong>30%</strong><span>faster reporting turnaround</span></li><li><strong>25%</strong><span>better data accuracy</span></li></ul>
 <div class="page__cols"><h2>What I did</h2><div><ul class="page__list"><li>Built and scaled a 50+ partner network across South Asia and China, managing the full lifecycle: sourcing, evaluation, contracting, onboarding, activation and growth.</li><li>Drove market entry across India, Vietnam and China with go-to-market plans at institutional and operational level.</li><li>Converted 10+ new agents directly from international events and delegations.</li><li>Coordinated academic delegations and launch events across India, Vietnam and Thailand, including travel, visas and event budgets.</li><li>Processed purchase orders, vendor invoices and commission payments, cutting the backlog by 50%.</li><li>Tracked pipeline KPIs in Power BI and CRM reporting, improving turnaround by 30% and data accuracy by 25%.</li><li>Supported the ACG x Leeds Conservatoire Foundation Programme in China with due diligence, contracts and cross-team coordination.</li></ul></div></div>
-<div class="page__gallery"><figure class="g-third"><img data-img="badge" alt="Delegate badge for ST Alphe UK 2025 beside University Centre Leeds and Leeds Conservatoire flyers" loading="lazy"><figcaption>ST Alphe UK 2025</figcaption></figure><figure class="g-third"><img data-img="hellostudy" alt="Shubhangi with a recruitment partner at an education fair" loading="lazy"><figcaption>With a recruitment partner</figcaption></figure><figure class="g-third"><img data-img="delegation" alt="Education partners at a University Centre Leeds event" loading="lazy"><figcaption>University Centre Leeds partner event</figcaption></figure></div>
+<div class="page__gallery"><figure class="g-third"><img data-img="badge" alt="Delegate badge for ST Alphe UK 2025 beside University Centre Leeds and Leeds Conservatoire flyers" loading="lazy" width="900" height="1200"><figcaption>ST Alphe UK 2025</figcaption></figure><figure class="g-third"><img data-img="hellostudy" alt="Shubhangi with a recruitment partner at an education fair" loading="lazy" width="820" height="1093"><figcaption>With a recruitment partner</figcaption></figure><figure class="g-third"><img data-img="delegation" alt="Education partners at a University Centre Leeds event" loading="lazy" width="1000" height="719"><figcaption>University Centre Leeds partner event</figcaption></figure></div>
 <nav class="page__next" aria-label="More"><button type="button" class="page__back" data-close><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg> Back to the portfolio</button><a href="#luminate-recruitment-manager"><small>Next role</small><b>Recruitment Manager, South Asia</b></a></nav></div></div></article>
 <article class="page" data-page="luminate-recruitment-manager" data-lenis-prevent aria-labelledby="pg-luminate-recruitment-manager">
 <div class="page__bar"><button type="button" class="page__back" data-close><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg> Back to the portfolio</button><span class="page__crumb">Experience · Luminate</span></div>
@@ -2069,7 +2076,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 <ul class="page__stats"><li><strong>£1M+</strong><span>revenue pipeline</span></li><li><strong>25%</strong><span>quarter-on-quarter pipeline growth</span></li><li><strong>30%</strong><span>faster reporting turnaround</span></li><li><strong>25%</strong><span>better data accuracy</span></li></ul>
 <p class="page__quote">“The person people come to, to get the work done.”</p>
 <div class="page__cols"><h2>What I did</h2><div><ul class="page__list"><li>Own the end-to-end commercial pipeline for South Asia: prospecting, qualification, conversion and retention.</li><li>Generated a £1M+ revenue pipeline through consultative partner engagement, market analysis and tailored solution positioning.</li><li>Delivered 25% quarter-on-quarter pipeline growth through a structured sales cadence and data-driven performance management.</li><li>Designed Power BI dashboards and CRM reports for pipeline KPIs: reporting turnaround up 30%, data accuracy up 25%.</li><li>Lead the ACG x Leeds Conservatoire strategic partnership programme end to end: stakeholder alignment, contract delivery and commercial outcomes.</li></ul></div></div>
-<div class="page__gallery"><figure class="g-wide"><img data-img="stall" alt="Shubhangi talking with prospective students at a Leeds Conservatoire stand" loading="lazy"><figcaption>Exhibiting for Leeds Conservatoire</figcaption></figure></div>
+<div class="page__gallery"><figure class="g-wide"><img data-img="stall" alt="Shubhangi talking with prospective students at a Leeds Conservatoire stand" loading="lazy" width="1000" height="875"><figcaption>Exhibiting for Leeds Conservatoire</figcaption></figure></div>
 <nav class="page__next" aria-label="More"><button type="button" class="page__back" data-close><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg> Back to the portfolio</button><a href="#msc-leeds"><small>Next</small><b>University of Leeds</b></a></nav></div></div></article>
 <article class="page" data-page="msc-leeds" data-lenis-prevent aria-labelledby="pg-msc-leeds">
 <div class="page__bar"><button type="button" class="page__back" data-close><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg> Back to the portfolio</button><span class="page__crumb">Education · University of Leeds</span></div>
@@ -2118,7 +2125,7 @@ h3 .olink,h4 .olink{text-decoration-color:rgba(156,114,54,.3)}
 <ul class="page__stats"><li><strong>2,000+</strong><span>volunteers mobilised</span></li><li><strong>50+</strong><span>community partners</span></li><li><strong>44,000+</strong><span>meals served</span></li><li><strong>1,000</strong><span>vaccinations</span></li></ul>
 <p class="page__quote">“Leadership without authority.”</p>
 <div class="page__cols"><h2>What I did</h2><div><ul class="page__list"><li>Crisis response with no budget: every meal and every dose came through partners and volunteers.</li><li>Coordinated with government and community organisations for permissions, venues and supplies.</li><li>Ran logistics and last-mile delivery across the city.</li><li>Kept 2,000+ volunteers moving in the same direction without any formal authority over them.</li></ul></div></div>
-<div class="page__gallery"><figure class="g-wide"><img data-img="rhateam" alt="Robin Hood Army volunteers in green shirts posing as a group" loading="lazy"><figcaption>The Lucknow team</figcaption></figure><figure class="g-mid"><img data-img="vaccine" alt="Shubhangi in a mask and gloves at a vaccination camp registration desk" loading="lazy"><figcaption>At a vaccination camp</figcaption></figure><figure class="g-half"><img data-img="rhacert" alt="Robin Hood Army volunteers holding certificates at an outdoor event" loading="lazy"><figcaption>Volunteers recognised for their work</figcaption></figure><figure class="g-half"><img data-img="feeding" alt="Shubhangi feeding a child at a food drive" loading="lazy"><figcaption>A food drive</figcaption></figure></div>
+<div class="page__gallery"><figure class="g-wide"><img data-img="rhateam" alt="Robin Hood Army volunteers in green shirts posing as a group" loading="lazy" width="1000" height="452"><figcaption>The Lucknow team</figcaption></figure><figure class="g-mid"><img data-img="vaccine" alt="Shubhangi in a mask and gloves at a vaccination camp registration desk" loading="lazy" width="1200" height="801"><figcaption>At a vaccination camp</figcaption></figure><figure class="g-half"><img data-img="rhacert" alt="Robin Hood Army volunteers holding certificates at an outdoor event" loading="lazy" width="1000" height="750"><figcaption>Volunteers recognised for their work</figcaption></figure><figure class="g-half"><img data-img="feeding" alt="Shubhangi feeding a child at a food drive" loading="lazy" width="900" height="1200"><figcaption>A food drive</figcaption></figure></div>
 <nav class="page__next" aria-label="More"><button type="button" class="page__back" data-close><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg> Back to the portfolio</button><a href="#the-kind-hour"><small>Next</small><b>The Kind Hour</b></a></nav></div></div></article>
 <article class="page" data-page="the-kind-hour" data-lenis-prevent aria-labelledby="pg-the-kind-hour">
 <div class="page__bar"><button type="button" class="page__back" data-close><svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M18 5H2M6 1L2 5l4 4" fill="none" stroke="currentColor"/></svg> Back to the portfolio</button><span class="page__crumb">Beyond the day job</span></div>
@@ -2149,7 +2156,13 @@ root.classList.remove("no-js");
 var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
 if(RM) root.classList.add("reduced");
 var hasG=typeof window.gsap!=="undefined";
-var FINE=window.matchMedia&&matchMedia("(hover:hover) and (pointer:fine)").matches;
+/* A touch screen must never be handed to the smooth-scroll library: it
+   lerps toward a target, so the page keeps gliding after the finger lifts
+   and settles somewhere the reader did not choose. Some phones report
+   hover:hover, so the touch test is the one that decides. */
+var COARSE=!!(window.matchMedia&&matchMedia("(pointer:coarse)").matches)||
+           (navigator.maxTouchPoints||0)>0||"ontouchstart" in window;
+var FINE=!COARSE&&!!(window.matchMedia&&matchMedia("(hover:hover) and (pointer:fine)").matches);
 var $=function(s,c){return (c||document).querySelector(s)};
 var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
 var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
@@ -2273,7 +2286,9 @@ function finishLoader(){
   function upd(){
     var y=window.scrollY,hb=hero.offsetHeight-80;
     hdr.classList.toggle("is-solid",y>hb);
-    hdr.classList.toggle("is-hidden",y>hb+400&&y>lastY+2&&!document.body.classList.contains("is-locked"));
+    // On a phone the menu button lives in this bar, so hiding the bar hides
+    // the only way to jump between sections. It stays put on touch screens.
+    hdr.classList.toggle("is-hidden",!COARSE&&y>hb+400&&y>lastY+2&&!document.body.classList.contains("is-locked"));
     if(y<lastY-2)hdr.classList.remove("is-hidden");
     lastY=y;
     var max=document.documentElement.scrollHeight-vh();
@@ -2617,12 +2632,16 @@ function __initGlobe(){
   var el=$("#sphere");if(!el)return;
   var main=["Market entry strategy","Strategic partnerships","Stakeholder management","Change management","Storytelling","Project delivery"];
   var more=["Consultative selling","Pipeline building","B2B account management","Partner and channel sales","Negotiation","C-suite engagement","Sales forecasting","Brand positioning","Market research","Audience segmentation","Power BI","Salesforce","HubSpot","Microsoft Dynamics","Sales Navigator","Agile delivery","Procurement","Budget management","Cross-cultural teams","Client onboarding","Volunteer mobilisation","Business writing"];
+  /* 28 labels on a sphere the width of a phone can only be set in type too
+     small to read. A narrow screen gets the six headline skills and half of
+     the rest, which leaves room for them to be legible. */
+  if(window.innerWidth<720) more=more.filter(function(_,i){return i%2===0});
   var tags=[],mi=0,oi=0;
   while(mi<6||oi<more.length){if(mi<6&&tags.length%4===0)tags.push({t:main[mi++],m:1});else if(oi<more.length)tags.push({t:more[oi++],m:0});else tags.push({t:main[mi++],m:1})}
   var N=tags.length,pts=[];
   tags.forEach(function(tg,i){var y=1-(i/(N-1))*2,r=Math.sqrt(1-y*y),th=Math.PI*(3-Math.sqrt(5))*i;var s=document.createElement("span");s.className="sphere__tag"+(tg.m?" is-main":"");s.textContent=tg.t;el.appendChild(s);pts.push({x:Math.cos(th)*r,y:y,z:Math.sin(th)*r,el:s})});
   var ax=0,ay=-0.5,vx=.0012,vy=RM?0:.0052,drag=false,lx=0,ly=0,R=0,inView=false,raf=0;
-  function sz(){R=el.clientWidth*(el.clientWidth<520?.32:.4)}
+  function sz(){R=el.clientWidth*(el.clientWidth<520?.27:.4)}  // room for the longest label at the rim
   var COARSE=window.matchMedia&&matchMedia("(pointer:coarse)").matches,half=0;
   function frame(){
     if(inView)raf=requestAnimationFrame(frame);
@@ -3038,7 +3057,14 @@ window.addEventListener("resize",function(){if(!ticking){ticking=true;requestAni
   function smooth(t){return t*t*(3-2*t)}
 
   var BAND=0.12, FLOOR=0.196;
-  var artEl=$("#spainArt");
+  var artEl=$("#spainArt"),maskRect=$("#spainMaskRect");
+  /* The torn edge is turbulence displacing the mask, and the mask is redrawn
+     every frame. That is a lot of filtering for a phone, and on some mobile
+     engines the filtered mask is dropped altogether, which shows the whole
+     picture at once with no reveal at all. Touch screens get the plain
+     gradient; the artwork's own edges are already torn. */
+  if(maskRect&&window.matchMedia&&matchMedia("(pointer:coarse)").matches)
+    maskRect.removeAttribute("filter");
   function draw(p){
     // the picture is 250 KB and sits deep in the page: it is not asked for
     // until the section is close enough for this to run at all
