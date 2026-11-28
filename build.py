@@ -128,17 +128,36 @@ head='''<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Shubhangi Gupta, international growth, sales and partnerships</title>
-<meta name="description" content="Shubhangi Gupta builds partner networks, pipelines and new markets. Recruitment Manager, South Asia at Luminate Education Group, with seven years across India, the UK and international markets.">
+<title>Shubhangi Gupta &mdash; International Growth, Sales &amp; Partnerships</title>
+<meta name="description" content="Recruitment Manager for South Asia at Luminate Education Group. Eight years building partner networks, pipelines and new markets across India and the UK.">
+<link rel="canonical" href="https://shubhangigupta.com/">
+<meta name="author" content="Shubhangi Gupta">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="theme-color" content="#FBF8F2">
 <meta property="og:type" content="profile">
-<meta property="og:title" content="Shubhangi Gupta: creating what didn’t exist before">
-<meta property="og:description" content="Sales, partnerships and client engagement across India, the UK and new markets.">
+<meta property="og:site_name" content="Shubhangi Gupta">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://shubhangigupta.com/">
+<meta property="og:title" content="Shubhangi Gupta &mdash; International Growth, Sales &amp; Partnerships">
+<meta property="og:description" content="Partner networks, pipelines and new markets. Eight years across India and the UK, now leading recruitment for South Asia.">
+<meta property="og:image" content="https://shubhangigupta.com/og-card.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Shubhangi Gupta, international growth, sales and partnerships">
+<meta property="profile:first_name" content="Shubhangi">
+<meta property="profile:last_name" content="Gupta">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Shubhangi Gupta &mdash; International Growth, Sales &amp; Partnerships">
+<meta name="twitter:description" content="Partner networks, pipelines and new markets. Eight years across India and the UK, now leading recruitment for South Asia.">
+<meta name="twitter:image" content="https://shubhangigupta.com/og-card.png">
+<meta name="twitter:image:alt" content="Shubhangi Gupta, international growth, sales and partnerships">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 fill=%22%23FBF8F2%22/><text x=%2232%22 y=%2243%22 font-family=%22Georgia%22 font-style=%22italic%22 font-size=%2230%22 fill=%22%235C1230%22 text-anchor=%22middle%22>SG</text></svg>">
+<link rel="apple-touch-icon" href="https://shubhangigupta.com/og-card.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Shubhangi Gupta","jobTitle":"Recruitment Manager, South Asia","worksFor":{"@type":"Organization","name":"Luminate Education Group"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"University of Leeds"},{"@type":"CollegeOrUniversity","name":"SRM Institute of Science and Technology"}],"email":"mailto:guptashubhangi.work@gmail.com","sameAs":["https://www.linkedin.com/in/shubhangigupta097"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://shubhangigupta.com/#website","url":"https://shubhangigupta.com/","name":"Shubhangi Gupta","inLanguage":"en-GB","publisher":{"@id":"https://shubhangigupta.com/#person"}},{"@type":"ProfilePage","@id":"https://shubhangigupta.com/#page","url":"https://shubhangigupta.com/","name":"Shubhangi Gupta, international growth, sales and partnerships","isPartOf":{"@id":"https://shubhangigupta.com/#website"},"about":{"@id":"https://shubhangigupta.com/#person"},"primaryImageOfPage":{"@id":"https://shubhangigupta.com/#card"},"inLanguage":"en-GB"},{"@type":"ImageObject","@id":"https://shubhangigupta.com/#card","url":"https://shubhangigupta.com/og-card.png","width":1200,"height":630},{"@type":"Person","@id":"https://shubhangigupta.com/#person","name":"Shubhangi Gupta","url":"https://shubhangigupta.com/","image":{"@id":"https://shubhangigupta.com/#card"},"jobTitle":"Recruitment Manager, South Asia","description":"Recruitment Manager for South Asia at Luminate Education Group. Eight years building partner networks, pipelines and new markets across India and the UK.","email":"mailto:guptashubhangi.work@gmail.com","worksFor":{"@type":"Organization","name":"Luminate Education Group","url":"https://luminate.ac.uk"},"homeLocation":{"@type":"Place","address":{"@type":"PostalAddress","addressLocality":"Lucknow","addressRegion":"Uttar Pradesh","addressCountry":"IN"}},"alumniOf":[{"@type":"CollegeOrUniversity","name":"University of Leeds","url":"https://www.leeds.ac.uk"},{"@type":"CollegeOrUniversity","name":"SRM Institute of Science and Technology","url":"https://www.srmup.in"}],"knowsAbout":["International student recruitment","Market entry strategy","Strategic partnerships","Stakeholder management","Change management","B2B sales","Project delivery","Higher education marketing"],"knowsLanguage":["en","hi"],"sameAs":["https://www.linkedin.com/in/shubhangigupta097"]}]}</script>
 <style>
 '''+css+'''
 @media (max-width:980px){.hdr__nav a:not(.hdr__cta){display:none}}
@@ -168,6 +187,21 @@ for n in sorted(USED):
 shutil.copyfile(os.path.join(SRC,'data','land-110m.json'), os.path.join(ASSETS,'land-110m.json'))
 for f in os.listdir(ASSETS):                      # drop anything no longer used
     if f not in want: os.remove(os.path.join(ASSETS,f))
+# the share card, robots and the sitemap live at the root, where crawlers
+# and the social scrapers expect to find them
+shutil.copyfile(os.path.join(SRC,'images','og_card.png'), os.path.join(ROOT,'og-card.png'))
+with open(os.path.join(ROOT,'robots.txt'),'w',encoding='utf-8') as f:
+    f.write('User-agent: *\nAllow: /\n\nSitemap: https://shubhangigupta.com/sitemap.xml\n')
+import datetime
+stamp = datetime.date.today().isoformat()
+with open(os.path.join(ROOT,'sitemap.xml'),'w',encoding='utf-8') as f:
+    f.write('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+            '  <url>\n    <loc>https://shubhangigupta.com/</loc>\n'
+            f'    <lastmod>{stamp}</lastmod>\n'
+            '    <changefreq>monthly</changefreq>\n    <priority>1.0</priority>\n  </url>\n'
+            '</urlset>\n')
+
 kb = sum(os.path.getsize(os.path.join(ASSETS,f)) for f in os.listdir(ASSETS))//1024
 print('index.html written,',len(out.encode())//1024,'KB;',len(USED),'images in assets/ (',kb,'KB)')
 if '--list-images' in sys.argv: print(sorted(USED))

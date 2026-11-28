@@ -20,7 +20,12 @@ var easeIO=function(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2};
 var vh=function(){return window.innerHeight};
 
 /* shared images: each photo is embedded once */
-var SRC={};$$("img[data-key]").forEach(function(i){SRC[i.dataset.key]=i.getAttribute("src")});
+var SRC={},SRCWH={};
+$$("img[data-key]").forEach(function(i){
+  SRC[i.dataset.key]=i.getAttribute("src");
+  var w=i.getAttribute("width"),h=i.getAttribute("height");
+  if(w&&h)SRCWH[i.dataset.key]=[+w,+h];          // so tiles reserve their space too
+});
 $$("[data-img]").forEach(function(img){if(SRC[img.dataset.img])img.src=SRC[img.dataset.img]});
 
 /* smooth scroll */
@@ -521,6 +526,21 @@ function __initGlobe(){
 })();
 
 /* beyond: hover and pin */
+
+/* photographs inside the cast panels are content, not decoration */
+var TILE_ALT={
+  rhateam:"Robin Hood Army volunteers in green shirts gathered for a group photograph",
+  rhacert:"Robin Hood Army volunteers holding certificates at an outdoor event in Lucknow",
+  vaccine:"Shubhangi in a mask and gloves at a COVID-19 vaccination camp registration desk",
+  feeding:"Shubhangi feeding a child during a Robin Hood Army food drive",
+  kaaash_stall:"Shubhangi with two friends at the Kaaash Impression stall, hand castings on the table",
+  stall:"Shubhangi at the Leeds Conservatoire exhibition stand",
+  hellostudy:"Shubhangi with a recruitment partner at an education fair",
+  delegation:"Education partners at a University Centre Leeds event",
+  badge:"Delegate badge for ST Alphe UK 2025",
+  infosys_xpo:"Shubhangi presenting from an Infosys podium"
+};
+
 (function(){
   var cast=$("#cast");if(!cast)return;
   var tilesEl=$("#castTiles"),panel=$("#castPanel");
@@ -536,7 +556,10 @@ function __initGlobe(){
     groups[k]=D[k].tiles.map(function(t,i){
       var d=document.createElement("div"),s=slots[i];d.className="tile"+(t.img?"":" tile--type");
       d.style.cssText="left:"+s.l+"%;top:"+s.t+"%;width:"+s.w+"%;height:"+s.h+"%;transition-delay:"+(i*.07)+"s";
-      if(t.img){var im=document.createElement("img");im.alt="";im.src=SRC[t.img]||"";im.loading="lazy";d.appendChild(im)}
+      if(t.img){var im=document.createElement("img");
+        im.alt=TILE_ALT[t.img]||"";im.src=SRC[t.img]||"";im.loading="lazy";
+        var sz=SRCWH[t.img];if(sz){im.width=sz[0];im.height=sz[1]}
+        d.appendChild(im)}
       else d.innerHTML="<strong>"+t.s+"</strong><span>"+t.d+"</span>";
       tilesEl.appendChild(d);return d;
     });
